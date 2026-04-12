@@ -28,20 +28,19 @@
               blueDark: '#5465ce',
               pink: '#ea7ca1',
               pinkDark: '#d6638b',
-              bg: '#f4f6fa',
+              bg: '#fcfcfd', /* Lighter background matching new UI */
               card: '#ffffff',
-              textMain: '#2d3142',
-              textSub: '#9ba1b9',
-              border: '#eef0f6',
-              cyan: '#58cad6',
-              peach: '#f79a83'
+              textMain: '#1e2029', /* Darker text for higher contrast */
+              textSub: '#8e94a8',
+              border: '#f1f3f8',
+              inputBg: '#f6f7fa', /* Soft gray for inputs */
             }
           },
           boxShadow: {
-            'card': '0 12px 30px -10px rgba(107, 125, 237, 0.15)',
-            'nav': '0 -10px 40px -10px rgba(0,0,0,0.08)',
-            'fab': '0 10px 25px -5px rgba(234, 124, 161, 0.4)',
+            'card': '0 10px 30px -10px rgba(0,0,0,0.05)',
+            'nav': '0 -10px 30px -10px rgba(0,0,0,0.06)',
             'modal': '0 -20px 40px -10px rgba(0,0,0,0.1)',
+            'dropdown': '0 15px 40px -10px rgba(0,0,0,0.15)',
           }
         }
       }
@@ -50,26 +49,23 @@
 
   <style>
     body {
-      background-color: #e5e7eb; /* Gray outer background for desktop */
+      background-color: #e5e7eb; 
       -webkit-tap-highlight-color: transparent;
     }
     
-    /* The main mobile container */
     #app-container {
       max-width: 420px;
       margin: 0 auto;
-      background-color: #f4f6fa;
+      background-color: #ffffff;
       min-height: 100vh;
       position: relative;
       overflow-x: hidden;
       box-shadow: 0 0 40px rgba(0,0,0,0.05);
     }
 
-    /* Hide scrollbar for a cleaner mobile look */
     .hide-scroll::-webkit-scrollbar { display: none; }
     .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
 
-    /* Tab transitions */
     .tab-content { 
       display: none; 
       animation: fadeScale 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; 
@@ -81,7 +77,6 @@
       to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
-    /* Bottom Sheet animations */
     .bottom-sheet {
       transform: translateY(100%);
       transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -100,35 +95,40 @@
     }
 
     .nav-btn {
-      color: #9ba1b9;
+      color: #b5b9c9;
       transition: color 0.2s ease;
     }
     .nav-btn.active {
-      color: #6b7ded;
+      color: #1e2029;
+    }
+    .nav-btn.active svg {
+      stroke: #1e2029;
+      fill: #1e2029;
     }
 
-    /* Standardized Select Dropdown Styling */
-    input, select {
+    /* Remove native input/select styles since we use custom UI now */
+    input {
       -webkit-appearance: none;
       appearance: none;
-    }
-    
-    select, input[list] {
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239ba1b9'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 1rem center;
-      background-size: 1.2em;
+      background: transparent;
     }
 
-    /* Hide the native datalist dropdown arrow to prevent double arrows, but keep it clickable */
-    input[list]::-webkit-calendar-picker-indicator {
-      opacity: 0;
-      cursor: pointer;
+    /* Custom Colored Radio Indicators */
+    input[type="radio"]:checked + .radio-container {
+      background-color: var(--radio-bg);
+      border-color: var(--radio-color);
     }
-
-    select.sort-dropdown {
-      background-position: right 0.5rem center;
-      background-size: 1em;
+    input[type="radio"]:checked + .radio-container .radio-circle {
+      border-color: var(--radio-color);
+      background-color: var(--radio-color);
+    }
+    input[type="radio"]:checked + .radio-container .radio-dot {
+      opacity: 1;
+      background-color: #ffffff;
+      transform: scale(1);
+    }
+    .radio-dot {
+      transform: scale(0);
     }
   </style>
 </head>
@@ -138,7 +138,6 @@
 
     <!-- ================= LOGIN SCREEN ================= -->
     <div id="loginScreen" class="absolute inset-0 bg-white z-50 flex flex-col justify-center px-8 hidden">
-      <!-- 3D-ish Header Illustration Placeholder -->
       <div class="w-full flex justify-center mb-8">
         <div class="w-48 h-48 bg-monety-bg rounded-[3rem] shadow-card flex items-center justify-center relative overflow-hidden">
           <div class="absolute -top-10 -right-10 w-32 h-32 bg-monety-pink/20 rounded-full blur-2xl"></div>
@@ -155,16 +154,17 @@
       </div>
       
       <form id="loginForm" onsubmit="return false" class="space-y-4">
-        <div>
-          <input type="email" id="loginEmail" placeholder="Email Address" class="w-full px-5 py-4 bg-monety-bg border-none rounded-2xl focus:outline-none focus:ring-2 focus:ring-monety-blue transition font-medium text-sm" required>
+        <div class="bg-monety-inputBg rounded-[1.5rem] p-4">
+          <label class="block text-[11px] text-monety-textSub font-bold uppercase tracking-wider mb-1">Email</label>
+          <input type="email" id="loginEmail" placeholder="Enter your email" class="w-full text-monety-textMain font-bold focus:outline-none" required>
         </div>
-        <div>
-          <input type="password" id="loginPassword" placeholder="Password" class="w-full px-5 py-4 bg-monety-bg border-none rounded-2xl focus:outline-none focus:ring-2 focus:ring-monety-blue transition font-medium text-sm" required>
+        <div class="bg-monety-inputBg rounded-[1.5rem] p-4">
+          <label class="block text-[11px] text-monety-textSub font-bold uppercase tracking-wider mb-1">Password</label>
+          <input type="password" id="loginPassword" placeholder="Enter your password" class="w-full text-monety-textMain font-bold focus:outline-none" required>
         </div>
         
-        <button type="submit" class="w-full bg-monety-pink hover:bg-monety-pinkDark text-white font-bold py-4 rounded-2xl shadow-fab transition-all transform active:scale-95 flex items-center justify-center gap-2 mt-2">
+        <button type="submit" class="w-full bg-monety-blue hover:bg-monety-blueDark text-white font-bold py-4 rounded-[1.5rem] shadow-md transition-all active:scale-95 mt-2">
           Sign In
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
         </button>
       </form>
       
@@ -176,33 +176,24 @@
         <div class="flex-1 h-px bg-monety-border"></div>
       </div>
       
-      <button type="button" onclick="signInWithGoogle()" class="w-full border-2 border-monety-border text-monety-textMain font-bold py-4 rounded-2xl transition-all flex items-center justify-center gap-3 hover:bg-monety-bg active:scale-95">
-        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-        </svg>
+      <button type="button" onclick="signInWithGoogle()" class="w-full border-2 border-monety-border text-monety-textMain font-bold py-4 rounded-[1.5rem] transition-all flex items-center justify-center gap-3 hover:bg-monety-bg active:scale-95">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
         Sign in with Google
       </button>
     </div>
 
-    <!-- ================= TOP HEADER ================= -->
-    <header class="pt-12 pb-4 px-6 sticky top-0 z-30 bg-monety-bg/90 backdrop-blur-md">
+    <!-- ================= TOP HEADER (New Minimal Style) ================= -->
+    <header class="pt-10 pb-4 px-6 bg-white sticky top-0 z-30">
       <div class="flex justify-between items-center">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-full bg-monety-card shadow-sm border border-monety-border flex items-center justify-center text-lg">
-            👰‍♀️
-          </div>
-          <div>
-            <p class="text-xs text-monety-textSub font-medium">Hello there,</p>
-            <h1 class="text-sm font-bold text-monety-textMain">Lovebirds <span class="text-xs">▾</span></h1>
-          </div>
+        <div>
+          <p class="text-sm text-monety-textSub font-bold tracking-tight">Hello,</p>
+          <h1 class="text-2xl font-extrabold text-monety-textMain tracking-tight">Lovebirds</h1>
         </div>
         <div class="flex items-center gap-3">
-          <span id="status" class="w-2.5 h-2.5 bg-amber-400 rounded-full animate-pulse shadow-sm"></span>
-          <button onclick="logoutUser()" class="w-10 h-10 rounded-full bg-white shadow-sm border border-monety-border flex items-center justify-center text-monety-textMain hover:text-monety-pink transition-colors">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+          <span id="status" class="w-2 h-2 bg-amber-400 rounded-full animate-pulse shadow-sm hidden"></span>
+          <button onclick="logoutUser()" class="px-4 py-2 rounded-full border border-monety-border flex items-center gap-2 text-monety-textSub hover:text-red-500 hover:border-red-200 hover:bg-red-50 transition-colors shadow-sm text-xs font-bold">
+             <span>Log Out</span>
+             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
           </button>
         </div>
       </div>
@@ -213,38 +204,50 @@
 
       <!-- ================= DASHBOARD TAB (Home) ================= -->
       <div id="dashboardTab" class="tab-content active">
-        
-        <!-- Big Blue Dashboard Card -->
-        <div class="bg-monety-blue rounded-[2rem] p-6 shadow-card relative overflow-hidden mb-8">
-          <div class="absolute -right-12 -top-12 w-40 h-40 bg-white opacity-10 rounded-full"></div>
-          <div class="absolute right-8 bottom-4 w-16 h-16 bg-white opacity-10 rounded-xl rotate-12"></div>
-          
-          <div class="flex justify-between items-start relative z-10">
+
+        <!-- Dashboard Hero Card -->
+        <div class="bg-monety-inputBg rounded-[2rem] p-6 mb-8 flex items-center justify-between border border-monety-border/50 mt-2">
+          <div class="space-y-4">
             <div>
-              <p class="text-white/80 text-sm font-medium mb-1">Total Expenses Paid</p>
-              <h2 class="text-4xl font-extrabold text-white tracking-tight mb-2 flex items-baseline gap-1">
-                <span class="text-2xl font-semibold opacity-80">₹</span><span id="summPaid">0</span>
-              </h2>
-              <div class="inline-flex items-center gap-1.5 bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-full text-xs font-semibold text-white">
-                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                Remaining to Pay: ₹<span id="summRem">0</span>
+              <div class="flex items-center gap-2 mb-1">
+                 <div class="w-1 h-3 bg-[#a4d0a4] rounded-full"></div>
+                 <p class="text-[11px] font-bold text-monety-textSub uppercase tracking-wider">Total Budget</p>
               </div>
+              <h3 class="text-2xl font-extrabold text-monety-textMain ml-3 tracking-tight">₹<span id="summBudgetStat">0</span></h3>
             </div>
+            <div>
+              <div class="flex items-center gap-2 mb-1">
+                 <div class="w-1 h-3 bg-monety-pink rounded-full"></div>
+                 <p class="text-[11px] font-bold text-monety-textSub uppercase tracking-wider">Spent</p>
+              </div>
+              <h3 class="text-xl font-bold text-monety-textMain ml-3 tracking-tight">₹<span id="summPaid">0</span></h3>
+            </div>
+          </div>
+          <!-- Donut Chart Canvas -->
+          <div class="w-24 h-24 relative">
+             <canvas id="homeDonutChart"></canvas>
           </div>
         </div>
 
-        <div class="flex justify-between items-end mb-4">
-          <h3 class="text-lg font-extrabold text-monety-textMain">Recent Expenses</h3>
-          <select id="sortDashboard" onchange="renderDashboard()" class="sort-dropdown text-xs bg-white border border-monety-border rounded-lg py-1.5 pl-3 pr-7 text-monety-textSub font-bold shadow-sm focus:outline-none focus:ring-2 focus:ring-monety-blue/20 transition cursor-pointer">
-            <option value="date">Newest</option>
-            <option value="amount">Highest</option>
-          </select>
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-base font-bold text-monety-textSub">Recent transactions</h3>
+          <!-- Modern Custom Sort Dropdown -->
+          <div class="relative custom-dd-container">
+            <div class="flex items-center gap-1.5 text-[11px] uppercase tracking-wider font-bold text-monety-textMain cursor-pointer bg-monety-inputBg rounded-full py-1.5 px-4 shadow-sm hover:bg-gray-100 transition-colors" onclick="toggleCustomDropdown('sortDashboard-menu')">
+              <span id="sortDashboard-label">Newest</span>
+              <svg class="w-3.5 h-3.5 text-monety-textSub" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path></svg>
+            </div>
+            <input type="hidden" id="sortDashboard" value="date">
+            <div id="sortDashboard-menu" class="custom-dd-menu hidden absolute top-full right-0 mt-2 w-36 bg-white rounded-2xl shadow-dropdown z-[60] border border-monety-border p-2 flex flex-col gap-1">
+              <div class="px-4 py-3 rounded-xl text-sm font-bold hover:bg-monety-inputBg cursor-pointer transition-colors text-monety-textMain dd-item" onclick="selectSort('sortDashboard', 'date', 'Newest')">Newest</div>
+              <div class="px-4 py-3 rounded-xl text-sm font-bold hover:bg-monety-inputBg cursor-pointer transition-colors text-monety-textMain dd-item" onclick="selectSort('sortDashboard', 'amount', 'Highest')">Highest</div>
+            </div>
+          </div>
         </div>
         
-        <div class="bg-white rounded-[2rem] p-5 shadow-sm border border-monety-border mb-6">
-          <div id="dashboardExpensesList" class="space-y-0 divide-y divide-monety-border">
-            <!-- Rendered via JS -->
-          </div>
+        <!-- Simplified List container -->
+        <div id="dashboardExpensesList" class="space-y-2">
+          <!-- Rendered via JS -->
         </div>
 
       </div>
@@ -253,40 +256,35 @@
       <div id="expensesTab" class="tab-content">
         <h2 class="text-2xl font-extrabold text-monety-textMain mb-6">Statistic</h2>
 
-        <!-- Mini total card -->
-        <div class="bg-monety-blue rounded-[1.5rem] p-5 shadow-card relative overflow-hidden mb-8 flex justify-between items-center">
-           <div>
-             <p class="text-white/80 text-xs font-medium mb-1">Effective Total Budget</p>
-             <h3 class="text-xl font-bold text-white flex items-baseline gap-1">
-                ₹<span id="summBudgetStat">0</span>
-             </h3>
-           </div>
-           <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center text-white backdrop-blur-sm">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-           </div>
-        </div>
-
         <div class="flex justify-between items-end mb-4">
-          <h3 class="text-lg font-extrabold text-monety-textMain">Expense Breakdown</h3>
-          <span class="text-xs bg-monety-bg px-3 py-1 rounded-full text-monety-textSub font-bold">Category</span>
+          <h3 class="text-base font-bold text-monety-textSub">Expense Breakdown</h3>
+          <span class="text-[10px] bg-monety-inputBg px-3 py-1 rounded-full text-monety-textMain font-bold">Category</span>
         </div>
 
-        <div class="bg-white rounded-[2rem] p-5 shadow-sm border border-monety-border mb-8">
+        <div class="bg-monety-inputBg rounded-[2rem] p-5 border border-monety-border/50 mb-8">
           <div class="relative h-48 w-full">
             <canvas id="expenseChart"></canvas>
           </div>
         </div>
 
-        <div class="flex justify-between items-end mb-4">
-          <h3 class="text-lg font-extrabold text-monety-textMain">All Expenses</h3>
-          <select id="sortExpenses" onchange="renderExpenses()" class="sort-dropdown text-xs bg-white border border-monety-border rounded-lg py-1.5 pl-3 pr-7 text-monety-textSub font-bold shadow-sm focus:outline-none focus:ring-2 focus:ring-monety-blue/20 transition cursor-pointer">
-            <option value="date">Newest</option>
-            <option value="amount">High to Low</option>
-            <option value="category">Category</option>
-          </select>
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-base font-bold text-monety-textSub">All Expenses</h3>
+          <!-- Modern Custom Sort Dropdown -->
+          <div class="relative custom-dd-container">
+            <div class="flex items-center gap-1.5 text-[11px] uppercase tracking-wider font-bold text-monety-textMain cursor-pointer bg-monety-inputBg rounded-full py-1.5 px-4 shadow-sm hover:bg-gray-100 transition-colors" onclick="toggleCustomDropdown('sortExpenses-menu')">
+              <span id="sortExpenses-label">Newest</span>
+              <svg class="w-3.5 h-3.5 text-monety-textSub" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path></svg>
+            </div>
+            <input type="hidden" id="sortExpenses" value="date">
+            <div id="sortExpenses-menu" class="custom-dd-menu hidden absolute top-full right-0 mt-2 w-40 bg-white rounded-2xl shadow-dropdown z-[60] border border-monety-border p-2 flex flex-col gap-1">
+              <div class="px-4 py-3 rounded-xl text-sm font-bold hover:bg-monety-inputBg cursor-pointer transition-colors text-monety-textMain dd-item" onclick="selectSort('sortExpenses', 'date', 'Newest')">Newest</div>
+              <div class="px-4 py-3 rounded-xl text-sm font-bold hover:bg-monety-inputBg cursor-pointer transition-colors text-monety-textMain dd-item" onclick="selectSort('sortExpenses', 'amount', 'High to Low')">High to Low</div>
+              <div class="px-4 py-3 rounded-xl text-sm font-bold hover:bg-monety-inputBg cursor-pointer transition-colors text-monety-textMain dd-item" onclick="selectSort('sortExpenses', 'category', 'Category')">Category</div>
+            </div>
+          </div>
         </div>
 
-        <div id="expensesGrid" class="space-y-3">
+        <div id="expensesGrid" class="space-y-2">
           <!-- Rendered via JS -->
         </div>
       </div>
@@ -295,16 +293,24 @@
       <div id="planningTab" class="tab-content">
         <h2 class="text-2xl font-extrabold text-monety-textMain mb-6">Budget Plan</h2>
 
-        <div class="flex justify-between items-end mb-4">
-          <h3 class="text-sm font-bold text-monety-textSub uppercase tracking-wider">Allocations</h3>
-          <select id="sortPlanning" onchange="renderPlanning()" class="sort-dropdown text-xs bg-white border border-monety-border rounded-lg py-1.5 pl-3 pr-7 text-monety-textSub font-bold shadow-sm focus:outline-none focus:ring-2 focus:ring-monety-blue/20 transition cursor-pointer">
-            <option value="status">Status</option>
-            <option value="category">Category</option>
-            <option value="amount">High to Low</option>
-          </select>
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-base font-bold text-monety-textSub">Allocations</h3>
+          <!-- Modern Custom Sort Dropdown -->
+          <div class="relative custom-dd-container">
+            <div class="flex items-center gap-1.5 text-[11px] uppercase tracking-wider font-bold text-monety-textMain cursor-pointer bg-monety-inputBg rounded-full py-1.5 px-4 shadow-sm hover:bg-gray-100 transition-colors" onclick="toggleCustomDropdown('sortPlanning-menu')">
+              <span id="sortPlanning-label">Status</span>
+              <svg class="w-3.5 h-3.5 text-monety-textSub" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path></svg>
+            </div>
+            <input type="hidden" id="sortPlanning" value="status">
+            <div id="sortPlanning-menu" class="custom-dd-menu hidden absolute top-full right-0 mt-2 w-40 bg-white rounded-2xl shadow-dropdown z-[60] border border-monety-border p-2 flex flex-col gap-1">
+              <div class="px-4 py-3 rounded-xl text-sm font-bold hover:bg-monety-inputBg cursor-pointer transition-colors text-monety-textMain dd-item" onclick="selectSort('sortPlanning', 'status', 'Status')">Status</div>
+              <div class="px-4 py-3 rounded-xl text-sm font-bold hover:bg-monety-inputBg cursor-pointer transition-colors text-monety-textMain dd-item" onclick="selectSort('sortPlanning', 'category', 'Category')">Category</div>
+              <div class="px-4 py-3 rounded-xl text-sm font-bold hover:bg-monety-inputBg cursor-pointer transition-colors text-monety-textMain dd-item" onclick="selectSort('sortPlanning', 'amount', 'High to Low')">High to Low</div>
+            </div>
+          </div>
         </div>
 
-        <div id="planGrid" class="space-y-4">
+        <div id="planGrid" class="space-y-2">
           <!-- Rendered via JS -->
         </div>
       </div>
@@ -312,16 +318,24 @@
       <!-- ================= VENDORS TAB (Directory) ================= -->
       <div id="vendorsTab" class="tab-content">
         <h2 class="text-2xl font-extrabold text-monety-textMain mb-2">Vendors</h2>
-        <p class="text-sm text-monety-textSub font-medium mb-6">Venue, vendors, and transport</p>
+        <p class="text-sm text-monety-textSub font-medium mb-6">Directory of all hired services</p>
 
-        <div class="flex justify-between items-end mb-4 hidden">
-          <select id="sortVendors" onchange="renderVendors()" class="sort-dropdown text-xs bg-white border border-monety-border rounded-lg py-1.5 pl-3 pr-7 text-monety-textSub font-bold shadow-sm focus:outline-none focus:ring-2 focus:ring-monety-blue/20 transition cursor-pointer">
-            <option value="category">Category</option>
-            <option value="name">A-Z</option>
-          </select>
+        <div class="flex justify-between items-center mb-4 hidden">
+          <!-- Modern Custom Sort Dropdown -->
+          <div class="relative custom-dd-container">
+            <div class="flex items-center gap-1.5 text-[11px] uppercase tracking-wider font-bold text-monety-textMain cursor-pointer bg-monety-inputBg rounded-full py-1.5 px-4 shadow-sm hover:bg-gray-100 transition-colors" onclick="toggleCustomDropdown('sortVendors-menu')">
+              <span id="sortVendors-label">A-Z</span>
+              <svg class="w-3.5 h-3.5 text-monety-textSub" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path></svg>
+            </div>
+            <input type="hidden" id="sortVendors" value="name">
+            <div id="sortVendors-menu" class="custom-dd-menu hidden absolute top-full left-0 mt-2 w-40 bg-white rounded-2xl shadow-dropdown z-[60] border border-monety-border p-2 flex flex-col gap-1">
+              <div class="px-4 py-3 rounded-xl text-sm font-bold hover:bg-monety-inputBg cursor-pointer transition-colors text-monety-textMain dd-item" onclick="selectSort('sortVendors', 'name', 'A-Z')">A-Z</div>
+              <div class="px-4 py-3 rounded-xl text-sm font-bold hover:bg-monety-inputBg cursor-pointer transition-colors text-monety-textMain dd-item" onclick="selectSort('sortVendors', 'category', 'Category')">Category</div>
+            </div>
+          </div>
         </div>
 
-        <div id="vendorsGrid" class="grid grid-cols-1 gap-4">
+        <div id="vendorsGrid" class="space-y-2">
           <!-- Rendered via JS -->
         </div>
       </div>
@@ -329,30 +343,32 @@
     </main>
 
     <!-- ================= BOTTOM NAVIGATION ================= -->
-    <nav class="fixed bottom-0 w-full max-w-[420px] z-40">
-      <div class="bg-white rounded-t-[2rem] shadow-[0_-10px_40px_-10px_rgba(0,0,0,0.1)] px-6 py-4 flex justify-between items-center relative border-t border-monety-border/50">
+    <nav class="fixed bottom-0 w-full max-w-[420px] z-40 bg-white border-t border-monety-border/50 pb-safe">
+      <div class="flex justify-between items-center px-6 py-3">
         
-        <button id="btn-dashboardTab" onclick="showTab('dashboardTab')" class="nav-btn active p-2 flex flex-col items-center gap-1">
-          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M11.47 3.84a.75.75 0 011.06 0l8.99 9a.75.75 0 11-1.06 1.06l-1.22-1.22V20a2 2 0 01-2 2H6.75a2 2 0 01-2-2v-7.32l-1.22 1.22a.75.75 0 11-1.06-1.06l9-9zM6.25 11.19v8.81h11.5v-8.81L12 5.5l-5.75 5.69z"></path></svg>
+        <button id="btn-dashboardTab" onclick="showTab('dashboardTab')" class="nav-btn active flex flex-col items-center gap-1 w-12">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+          <span class="text-[10px] font-bold">Home</span>
         </button>
         
-        <button id="btn-expensesTab" onclick="showTab('expensesTab')" class="nav-btn p-2 flex flex-col items-center gap-1 mr-4">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"></path></svg>
+        <button id="btn-expensesTab" onclick="showTab('expensesTab')" class="nav-btn flex flex-col items-center gap-1 w-12">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"></path></svg>
+          <span class="text-[10px] font-bold">Stats</span>
         </button>
         
-        <!-- FAB Add Button -->
-        <div class="absolute left-1/2 -translate-x-1/2 -top-6">
-          <button onclick="toggleActionSheet()" class="w-14 h-14 bg-monety-pink hover:bg-monety-pinkDark text-white rounded-2xl shadow-fab flex items-center justify-center transform transition-transform active:scale-90">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" viewBox="0 0 24 24"><path d="M12 5v14m-7-7h14"></path></svg>
-          </button>
-        </div>
+        <!-- Inline Central Add Button -->
+        <button onclick="toggleActionSheet()" class="w-14 h-14 bg-monety-blue hover:bg-monety-blueDark text-white rounded-full flex items-center justify-center transform transition-transform active:scale-95 shadow-md -mt-5 border-4 border-white">
+           <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" viewBox="0 0 24 24"><path d="M12 5v14m-7-7h14"></path></svg>
+        </button>
 
-        <button id="btn-planningTab" onclick="showTab('planningTab')" class="nav-btn p-2 flex flex-col items-center gap-1 ml-4">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <button id="btn-planningTab" onclick="showTab('planningTab')" class="nav-btn flex flex-col items-center gap-1 w-12">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          <span class="text-[10px] font-bold">Plan</span>
         </button>
         
-        <button id="btn-vendorsTab" onclick="showTab('vendorsTab')" class="nav-btn p-2 flex flex-col items-center gap-1">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M17 20h5v-2a3 3 0 00-5.856-1.487M15 10a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+        <button id="btn-vendorsTab" onclick="showTab('vendorsTab')" class="nav-btn flex flex-col items-center gap-1 w-12">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M17 20h5v-2a3 3 0 00-5.856-1.487M15 10a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+          <span class="text-[10px] font-bold">Vendors</span>
         </button>
       </div>
     </nav>
@@ -360,32 +376,32 @@
   </div>
 
 
-  <!-- ================= BOTTOM SHEETS & MODALS ================= -->
+  <!-- ================= BOTTOM SHEETS & MODALS (Custom Dropdowns Included) ================= -->
 
   <!-- Add Action Sheet -->
   <div id="addOverlay" class="fixed inset-0 z-50 overlay bg-monety-textMain/40 backdrop-blur-sm flex items-end justify-center" onclick="toggleActionSheet()">
     <div id="addSheet" class="w-full max-w-[420px] bg-white rounded-t-[2rem] p-6 bottom-sheet shadow-modal" onclick="event.stopPropagation()">
       <div class="w-12 h-1.5 bg-monety-border rounded-full mx-auto mb-6"></div>
-      <h3 class="text-xl font-extrabold text-monety-textMain mb-4 text-center">What to add?</h3>
+      <h3 class="text-xl font-extrabold text-monety-textMain mb-6 text-center tracking-tight">What to add?</h3>
       
-      <div class="space-y-3">
-        <button onclick="toggleActionSheet(); openExpenseModal()" class="w-full flex items-center gap-4 p-4 rounded-2xl bg-monety-bg hover:bg-gray-100 transition text-left">
-          <div class="w-12 h-12 bg-monety-pink/10 text-monety-pink rounded-xl flex items-center justify-center">
+      <div class="space-y-4 mb-4">
+        <button onclick="toggleActionSheet(); openExpenseModal()" class="w-full flex items-center gap-4 p-4 rounded-[1.5rem] bg-monety-inputBg hover:bg-gray-100 transition text-left border border-transparent">
+          <div class="w-12 h-12 bg-white text-monety-pink rounded-xl flex items-center justify-center shadow-sm">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg>
           </div>
           <div>
-            <h4 class="font-bold text-monety-textMain">Log Expense</h4>
-            <p class="text-xs text-monety-textSub font-medium">Record a paid transaction</p>
+            <h4 class="font-bold text-monety-textMain text-base">Log Expense</h4>
+            <p class="text-xs text-monety-textSub font-medium mt-0.5">Record a paid transaction</p>
           </div>
         </button>
 
-        <button onclick="toggleActionSheet(); openMasterModal()" class="w-full flex items-center gap-4 p-4 rounded-2xl bg-monety-bg hover:bg-gray-100 transition text-left">
-          <div class="w-12 h-12 bg-monety-blue/10 text-monety-blue rounded-xl flex items-center justify-center">
+        <button onclick="toggleActionSheet(); openMasterModal()" class="w-full flex items-center gap-4 p-4 rounded-[1.5rem] bg-monety-inputBg hover:bg-gray-100 transition text-left border border-transparent">
+          <div class="w-12 h-12 bg-white text-monety-blue rounded-xl flex items-center justify-center shadow-sm">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
           </div>
           <div>
-            <h4 class="font-bold text-monety-textMain">Add Budget / Vendor</h4>
-            <p class="text-xs text-monety-textSub font-medium">Plan allocations and contacts</p>
+            <h4 class="font-bold text-monety-textMain text-base">Add Budget / Vendor</h4>
+            <p class="text-xs text-monety-textSub font-medium mt-0.5">Plan allocations and contacts</p>
           </div>
         </button>
       </div>
@@ -395,156 +411,254 @@
   <!-- Confirm Delete Modal -->
   <div id="confirmModal" class="fixed inset-0 z-50 overlay bg-monety-textMain/40 backdrop-blur-sm flex items-end justify-center" onclick="cancelDelete()">
     <div id="confirmSheet" class="w-full max-w-[420px] bg-white rounded-t-[2rem] p-8 bottom-sheet shadow-modal text-center" onclick="event.stopPropagation()">
-      <div class="w-16 h-16 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+      <div class="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
       </div>
-      <h3 id="confirmTitle" class="text-xl font-extrabold text-monety-textMain mb-2">Delete Item?</h3>
+      <h3 id="confirmTitle" class="text-xl font-extrabold text-monety-textMain mb-2 tracking-tight">Delete Item?</h3>
       <p id="confirmMessage" class="text-sm text-monety-textSub font-medium mb-8">This action cannot be undone.</p>
       
       <div class="flex gap-3">
-        <button onclick="cancelDelete()" class="flex-1 py-4 bg-monety-bg text-monety-textMain font-bold rounded-2xl">Cancel</button>
-        <button onclick="proceedDelete()" class="flex-1 py-4 bg-red-500 text-white font-bold rounded-2xl">Delete</button>
+        <button onclick="cancelDelete()" class="flex-1 py-4 bg-monety-inputBg text-monety-textMain font-bold rounded-[1.5rem]">Cancel</button>
+        <button onclick="proceedDelete()" class="flex-1 py-4 bg-red-500 text-white font-bold rounded-[1.5rem]">Delete</button>
       </div>
     </div>
   </div>
 
   <!-- Add/Edit Expense Form -->
   <div id="expenseOverlay" class="fixed inset-0 z-50 overlay bg-monety-textMain/40 backdrop-blur-sm flex items-end justify-center" onclick="toggleModal('expenseOverlay', 'expenseSheet')">
-    <div id="expenseSheet" class="w-full max-w-[420px] bg-white rounded-t-[2rem] p-6 bottom-sheet shadow-modal h-[85vh] overflow-y-auto hide-scroll" onclick="event.stopPropagation()">
+    <div id="expenseSheet" class="w-full max-w-[420px] bg-white rounded-t-[2rem] p-6 bottom-sheet shadow-modal h-[90vh] overflow-y-auto hide-scroll" onclick="event.stopPropagation()">
       <div class="flex justify-between items-center mb-6">
-        <h3 id="expenseModalTitle" class="text-xl font-extrabold text-monety-textMain">Log Expense</h3>
-        <button onclick="toggleModal('expenseOverlay', 'expenseSheet')" class="w-8 h-8 bg-monety-bg rounded-full flex items-center justify-center text-monety-textSub"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+        <button onclick="toggleModal('expenseOverlay', 'expenseSheet')" class="w-10 h-10 bg-monety-inputBg rounded-full flex items-center justify-center text-monety-textMain"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg></button>
+        <h3 id="expenseModalTitle" class="text-lg font-extrabold text-monety-textMain tracking-tight">Log Expense</h3>
+        <div class="w-10 h-10"></div> <!-- Spacer for centering -->
       </div>
 
       <div class="space-y-4">
+        
+        <!-- Modern Custom Dropdowns for Category & Subcategory -->
+        <div class="bg-monety-inputBg rounded-[1.5rem] p-2 flex flex-col">
+          <div class="relative custom-dd-container p-2">
+            <label class="block text-[11px] font-bold text-monety-textSub uppercase tracking-wider mb-1.5 ml-1">Category *</label>
+            <div class="flex items-center justify-between cursor-pointer" onclick="toggleCustomDropdown('expCategory-menu')">
+              <input type="text" id="expCategory" readonly placeholder="Select Category" class="w-full font-bold text-monety-textMain text-base bg-transparent outline-none cursor-pointer placeholder-monety-textSub ml-1">
+              <svg class="w-5 h-5 text-monety-textSub pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path></svg>
+            </div>
+            <!-- Custom Dropdown Menu -->
+            <div id="expCategory-menu" class="custom-dd-menu hidden absolute top-full left-0 w-full mt-3 bg-white rounded-[1.25rem] shadow-dropdown z-[60] max-h-56 overflow-y-auto border border-monety-border p-2">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+          <div class="h-px bg-monety-border mx-3 my-1"></div>
+          <div class="relative custom-dd-container p-2">
+            <label class="block text-[11px] font-bold text-monety-textSub uppercase tracking-wider mb-1.5 ml-1">Subcategory *</label>
+            <div class="flex items-center justify-between cursor-pointer" onclick="toggleCustomDropdown('expSub-menu')">
+              <input type="text" id="expSub" readonly placeholder="Select Item" class="w-full font-bold text-monety-textMain text-base bg-transparent outline-none cursor-pointer placeholder-monety-textSub ml-1">
+              <svg class="w-5 h-5 text-monety-textSub pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path></svg>
+            </div>
+            <!-- Custom Dropdown Menu -->
+            <div id="expSub-menu" class="custom-dd-menu hidden absolute top-full left-0 w-full mt-3 bg-white rounded-[1.25rem] shadow-dropdown z-[60] max-h-56 overflow-y-auto border border-monety-border p-2">
+               <!-- Rendered via JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Soft Amount Input -->
+        <div class="bg-monety-inputBg rounded-[1.5rem] p-5">
+          <label class="block text-[11px] font-bold text-monety-textSub uppercase tracking-wider mb-1">Amount *</label>
+          <div class="flex items-center">
+            <span class="text-monety-textMain font-bold text-2xl mr-2">₹</span>
+            <input id="amount" type="number" placeholder="0" class="w-full text-monety-textMain font-bold text-2xl focus:outline-none">
+          </div>
+        </div>
+
+        <!-- Colored Pill-Based Payment Type Selector -->
         <div>
-          <label class="block text-xs font-bold text-monety-textSub mb-1.5 uppercase tracking-wide">Amount *</label>
-          <div class="relative">
-            <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-monety-pink font-bold text-xl">₹</span>
-            <input id="amount" type="number" placeholder="0" class="w-full bg-monety-bg border border-transparent rounded-2xl text-monety-textMain font-bold text-xl py-4 pl-10 pr-4 focus:bg-white focus:border-monety-blue focus:ring-4 focus:ring-monety-blue/10 transition outline-none">
+          <label class="block text-[13px] font-bold text-monety-textMain mt-2 mb-3">Payment Type</label>
+          <div class="flex flex-col gap-2">
+            <!-- UPI (Blue) -->
+            <label class="block relative cursor-pointer" style="--radio-color: #6b7ded; --radio-bg: rgba(107, 125, 237, 0.08);">
+              <input type="radio" name="expTypeRadio" value="UPI" class="peer sr-only" checked>
+              <div class="radio-container p-4 rounded-[1.25rem] border border-transparent bg-monety-inputBg flex items-center gap-3 transition-all">
+                 <div class="radio-circle w-5 h-5 rounded-full border-2 border-monety-textSub flex items-center justify-center transition-colors">
+                    <div class="radio-dot w-2 h-2 rounded-full transition-all duration-200"></div>
+                 </div>
+                 <span class="font-bold text-monety-textMain text-sm">UPI</span>
+              </div>
+            </label>
+            <!-- Cash (Green) -->
+            <label class="block relative cursor-pointer" style="--radio-color: #a4d0a4; --radio-bg: rgba(164, 208, 164, 0.15);">
+              <input type="radio" name="expTypeRadio" value="Cash" class="peer sr-only">
+              <div class="radio-container p-4 rounded-[1.25rem] border border-transparent bg-monety-inputBg flex items-center gap-3 transition-all">
+                 <div class="radio-circle w-5 h-5 rounded-full border-2 border-monety-textSub flex items-center justify-center transition-colors">
+                    <div class="radio-dot w-2 h-2 rounded-full transition-all duration-200"></div>
+                 </div>
+                 <span class="font-bold text-monety-textMain text-sm">Cash</span>
+              </div>
+            </label>
+            <!-- Card (Pink) -->
+            <label class="block relative cursor-pointer" style="--radio-color: #ea7ca1; --radio-bg: rgba(234, 124, 161, 0.08);">
+              <input type="radio" name="expTypeRadio" value="Credit Card" class="peer sr-only">
+              <div class="radio-container p-4 rounded-[1.25rem] border border-transparent bg-monety-inputBg flex items-center gap-3 transition-all">
+                 <div class="radio-circle w-5 h-5 rounded-full border-2 border-monety-textSub flex items-center justify-center transition-colors">
+                    <div class="radio-dot w-2 h-2 rounded-full transition-all duration-200"></div>
+                 </div>
+                 <span class="font-bold text-monety-textMain text-sm">Credit/Debit Card</span>
+              </div>
+            </label>
+            <!-- Bank (Cyan) -->
+            <label class="block relative cursor-pointer" style="--radio-color: #58cad6; --radio-bg: rgba(88, 202, 214, 0.1);">
+              <input type="radio" name="expTypeRadio" value="Bank Transfer" class="peer sr-only">
+              <div class="radio-container p-4 rounded-[1.25rem] border border-transparent bg-monety-inputBg flex items-center gap-3 transition-all">
+                 <div class="radio-circle w-5 h-5 rounded-full border-2 border-monety-textSub flex items-center justify-center transition-colors">
+                    <div class="radio-dot w-2 h-2 rounded-full transition-all duration-200"></div>
+                 </div>
+                 <span class="font-bold text-monety-textMain text-sm">Bank Transfer</span>
+              </div>
+            </label>
           </div>
         </div>
 
-        <div class="grid grid-cols-2 gap-3">
+        <div class="bg-monety-inputBg rounded-[1.5rem] p-4">
+          <label class="block text-[11px] font-bold text-monety-textSub uppercase tracking-wider mb-1">Date</label>
+          <input id="expDate" type="date" class="w-full font-bold text-monety-textMain text-base focus:outline-none">
+        </div>
+
+        <div class="bg-monety-inputBg rounded-[1.5rem] p-4 flex flex-col gap-3">
+           <div>
+            <label class="block text-[11px] font-bold text-monety-textSub uppercase tracking-wider mb-1">Description</label>
+            <input id="expDesc" placeholder="Note or detail" class="w-full font-bold text-monety-textMain text-base focus:outline-none">
+          </div>
+          <div class="h-px bg-monety-border"></div>
           <div>
-            <label class="block text-xs font-bold text-monety-textSub mb-1.5 uppercase tracking-wide">Category *</label>
-            <select id="expCategory" onchange="updateSubDropdown('expCategory','expSub')" class="w-full bg-monety-bg border border-transparent rounded-2xl text-sm font-bold text-monety-textMain py-4 pl-4 pr-10 focus:bg-white focus:border-monety-blue focus:ring-4 focus:ring-monety-blue/10 transition outline-none cursor-pointer">
-              <option value="">Select</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-monety-textSub mb-1.5 uppercase tracking-wide">Subcategory *</label>
-            <select id="expSub" class="w-full bg-monety-bg border border-transparent rounded-2xl text-sm font-bold text-monety-textMain py-4 pl-4 pr-10 focus:bg-white focus:border-monety-blue focus:ring-4 focus:ring-monety-blue/10 transition outline-none cursor-pointer">
-              <option value="">Select</option>
-            </select>
+            <label class="block text-[11px] font-bold text-monety-textSub uppercase tracking-wider mb-1">Source Account</label>
+            <input id="expSource" placeholder="e.g. Joint Account" class="w-full font-bold text-monety-textMain text-base focus:outline-none">
           </div>
         </div>
 
-        <div>
-          <label class="block text-xs font-bold text-monety-textSub mb-1.5 uppercase tracking-wide">Description</label>
-          <input id="expDesc" placeholder="What was this for?" class="w-full bg-monety-bg border border-transparent rounded-2xl text-sm font-bold text-monety-textMain py-4 px-4 focus:bg-white focus:border-monety-blue focus:ring-4 focus:ring-monety-blue/10 transition outline-none">
-        </div>
-
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block text-xs font-bold text-monety-textSub mb-1.5 uppercase tracking-wide">Type</label>
-            <select id="expType" class="w-full bg-monety-bg border border-transparent rounded-2xl text-sm font-bold text-monety-textMain py-4 pl-4 pr-10 focus:bg-white focus:border-monety-blue focus:ring-4 focus:ring-monety-blue/10 transition outline-none cursor-pointer">
-              <option value="UPI">UPI</option>
-              <option value="Cash">Cash</option>
-              <option value="Credit Card">Card</option>
-              <option value="Bank Transfer">Bank</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-monety-textSub mb-1.5 uppercase tracking-wide">Date</label>
-            <input id="expDate" type="date" class="w-full bg-monety-bg border border-transparent rounded-2xl text-sm font-bold text-monety-textMain py-4 px-4 focus:bg-white focus:border-monety-blue focus:ring-4 focus:ring-monety-blue/10 transition outline-none">
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-xs font-bold text-monety-textSub mb-1.5 uppercase tracking-wide">Source</label>
-          <input id="expSource" placeholder="e.g. Joint Account" class="w-full bg-monety-bg border border-transparent rounded-2xl text-sm font-bold text-monety-textMain py-4 px-4 focus:bg-white focus:border-monety-blue focus:ring-4 focus:ring-monety-blue/10 transition outline-none">
-        </div>
-
-        <div class="flex gap-3 mt-4">
-          <button id="expenseDeleteBtn" onclick="triggerDeleteFromModal('expense')" class="hidden bg-red-50 text-red-500 hover:bg-red-100 font-bold py-4 px-6 rounded-2xl transition-all active:scale-95 flex items-center justify-center">
+        <div class="flex gap-3 pt-4">
+          <button id="expenseDeleteBtn" onclick="triggerDeleteFromModal('expense')" class="hidden border-2 border-monety-border bg-white text-monety-textMain hover:bg-red-50 hover:text-red-500 hover:border-red-100 font-bold py-4 px-6 rounded-[1.5rem] transition-all active:scale-95 flex items-center justify-center shadow-sm">
              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
           </button>
-          <button id="expenseModalBtn" onclick="saveExpense()" class="flex-1 bg-monety-blue hover:bg-monety-blueDark text-white font-bold py-4 rounded-2xl shadow-card transition-all active:scale-95">Save Expense</button>
+          <button id="expenseModalBtn" onclick="saveExpense()" class="flex-1 bg-[#a4d0a4] hover:bg-[#8eb88e] text-[#1e3b1e] font-extrabold text-base py-4 rounded-[1.5rem] transition-all active:scale-95 shadow-md">Add</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Add Master Plan / Vendor -->
+  <!-- Add Master Plan / Vendor Form -->
   <div id="masterOverlay" class="fixed inset-0 z-50 overlay bg-monety-textMain/40 backdrop-blur-sm flex items-end justify-center" onclick="toggleModal('masterOverlay', 'masterSheet')">
-    <div id="masterSheet" class="w-full max-w-[420px] bg-white rounded-t-[2rem] p-6 bottom-sheet shadow-modal h-[85vh] overflow-y-auto hide-scroll" onclick="event.stopPropagation()">
+    <div id="masterSheet" class="w-full max-w-[420px] bg-white rounded-t-[2rem] p-6 bottom-sheet shadow-modal h-[90vh] overflow-y-auto hide-scroll" onclick="event.stopPropagation()">
       <div class="flex justify-between items-center mb-6">
-        <h3 id="masterModalTitle" class="text-xl font-extrabold text-monety-textMain">Add Plan/Vendor</h3>
-        <button onclick="toggleModal('masterOverlay', 'masterSheet')" class="w-8 h-8 bg-monety-bg rounded-full flex items-center justify-center text-monety-textSub"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+        <button onclick="toggleModal('masterOverlay', 'masterSheet')" class="w-10 h-10 bg-monety-inputBg rounded-full flex items-center justify-center text-monety-textMain"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg></button>
+        <h3 id="masterModalTitle" class="text-lg font-extrabold text-monety-textMain tracking-tight">Add Plan/Vendor</h3>
+        <div class="w-10 h-10"></div>
       </div>
       
       <div class="space-y-4">
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block text-xs font-bold text-monety-textSub mb-1.5 uppercase tracking-wide">Est. Budget (₹) *</label>
-            <div class="relative">
-              <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-monety-blue font-bold">₹</span>
-              <input id="newBudget" type="number" placeholder="0" class="w-full bg-monety-bg border border-transparent rounded-2xl text-sm font-bold text-monety-textMain py-4 pl-10 pr-4 focus:bg-white focus:border-monety-blue focus:ring-4 focus:ring-monety-blue/10 transition outline-none">
+        
+        <!-- Modern Custom Dropdowns (Combobox style allowing typing) -->
+        <div class="bg-monety-inputBg rounded-[1.5rem] p-2 flex flex-col">
+          <div class="relative custom-dd-container p-2">
+            <label class="block text-[11px] font-bold text-monety-textSub uppercase tracking-wider mb-1.5 ml-1">Category *</label>
+            <div class="flex items-center justify-between">
+              <input type="text" id="masterCategory" placeholder="Type or Select" class="w-full font-bold text-monety-textMain text-base bg-transparent outline-none placeholder-monety-textSub ml-1" autocomplete="off" onfocus="openCustomDropdown('masterCategory-menu')" oninput="filterCustomDropdown('masterCategory', 'masterCategory-menu'); updateMasterSubDropdown();">
+              <svg class="w-5 h-5 text-monety-textSub cursor-pointer" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" onclick="toggleCustomDropdown('masterCategory-menu')"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path></svg>
+            </div>
+            <!-- Custom Dropdown Menu -->
+            <div id="masterCategory-menu" class="custom-dd-menu hidden absolute top-full left-0 w-full mt-3 bg-white rounded-[1.25rem] shadow-dropdown z-[60] max-h-56 overflow-y-auto border border-monety-border p-2">
+              <!-- Rendered via JS -->
             </div>
           </div>
-          <div>
-            <label class="block text-xs font-bold text-monety-textSub mb-1.5 uppercase tracking-wide">Finalized Amt (₹)</label>
-            <div class="relative">
-              <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-monety-blue font-bold">₹</span>
-              <input id="newFinalizedAmount" type="number" placeholder="0" class="w-full bg-monety-bg border border-transparent rounded-2xl text-sm font-bold text-monety-textMain py-4 pl-10 pr-4 focus:bg-white focus:border-monety-blue focus:ring-4 focus:ring-monety-blue/10 transition outline-none">
+          <div class="h-px bg-monety-border mx-3 my-1"></div>
+          <div class="relative custom-dd-container p-2">
+            <label class="block text-[11px] font-bold text-monety-textSub uppercase tracking-wider mb-1.5 ml-1">Subcategory *</label>
+            <div class="flex items-center justify-between">
+              <input type="text" id="newSub" placeholder="e.g. Rent" class="w-full font-bold text-monety-textMain text-base bg-transparent outline-none placeholder-monety-textSub ml-1" autocomplete="off" onfocus="openCustomDropdown('newSub-menu')" oninput="filterCustomDropdown('newSub', 'newSub-menu')">
+              <svg class="w-5 h-5 text-monety-textSub cursor-pointer" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" onclick="toggleCustomDropdown('newSub-menu')"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path></svg>
+            </div>
+            <!-- Custom Dropdown Menu -->
+            <div id="newSub-menu" class="custom-dd-menu hidden absolute top-full left-0 w-full mt-3 bg-white rounded-[1.25rem] shadow-dropdown z-[60] max-h-56 overflow-y-auto border border-monety-border p-2">
+              <!-- Rendered via JS -->
             </div>
           </div>
         </div>
 
         <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block text-xs font-bold text-monety-textSub mb-1.5 uppercase tracking-wide">Category *</label>
-            <input list="masterCategoryList" id="masterCategory" oninput="updateMasterSubDropdown()" placeholder="Type/Pick" class="w-full bg-monety-bg border border-transparent rounded-2xl text-sm font-bold text-monety-textMain py-4 pl-4 pr-10 focus:bg-white focus:border-monety-blue focus:ring-4 focus:ring-monety-blue/10 transition outline-none cursor-pointer">
-            <datalist id="masterCategoryList"></datalist>
+          <div class="bg-monety-inputBg rounded-[1.5rem] p-4">
+            <label class="block text-[11px] font-bold text-monety-textSub uppercase tracking-wider mb-1">Est. Budget *</label>
+            <div class="flex items-center">
+              <span class="text-monety-textMain font-bold text-lg mr-1">₹</span>
+              <input id="newBudget" type="number" placeholder="0" class="w-full font-bold text-monety-textMain text-lg focus:outline-none">
+            </div>
           </div>
-          <div>
-            <label class="block text-xs font-bold text-monety-textSub mb-1.5 uppercase tracking-wide">Subcategory *</label>
-            <input list="masterSubCategoryList" id="newSub" placeholder="e.g. Rent" class="w-full bg-monety-bg border border-transparent rounded-2xl text-sm font-bold text-monety-textMain py-4 pl-4 pr-10 focus:bg-white focus:border-monety-blue focus:ring-4 focus:ring-monety-blue/10 transition outline-none cursor-pointer">
-            <datalist id="masterSubCategoryList"></datalist>
+          <div class="bg-monety-inputBg rounded-[1.5rem] p-4">
+            <label class="block text-[11px] font-bold text-monety-textSub uppercase tracking-wider mb-1">Finalized</label>
+            <div class="flex items-center">
+              <span class="text-monety-textMain font-bold text-lg mr-1">₹</span>
+              <input id="newFinalizedAmount" type="number" placeholder="0" class="w-full font-bold text-monety-textMain text-lg focus:outline-none">
+            </div>
           </div>
         </div>
 
+        <div class="bg-monety-inputBg rounded-[1.5rem] p-4 flex flex-col gap-3">
+           <div>
+            <label class="block text-[11px] font-bold text-monety-textSub uppercase tracking-wider mb-1">Vendor Name</label>
+            <input id="newName" placeholder="Optional" class="w-full font-bold text-monety-textMain text-base focus:outline-none">
+          </div>
+          <div class="h-px bg-monety-border"></div>
+          <div>
+            <label class="block text-[11px] font-bold text-monety-textSub uppercase tracking-wider mb-1">Contact Person</label>
+            <input id="newContact" placeholder="Optional" class="w-full font-bold text-monety-textMain text-base focus:outline-none">
+          </div>
+          <div class="h-px bg-monety-border"></div>
+          <div>
+            <label class="block text-[11px] font-bold text-monety-textSub uppercase tracking-wider mb-1">Phone</label>
+            <input id="newPhone" placeholder="Optional" class="w-full font-bold text-monety-textMain text-base focus:outline-none">
+          </div>
+        </div>
+
+        <!-- Colored Pill-Based Status Selector -->
         <div>
-          <label class="block text-xs font-bold text-monety-textSub mb-1.5 uppercase tracking-wide">Vendor Name</label>
-          <input id="newName" placeholder="Optional" class="w-full bg-monety-bg border border-transparent rounded-2xl text-sm font-bold text-monety-textMain py-4 px-4 focus:bg-white focus:border-monety-blue focus:ring-4 focus:ring-monety-blue/10 transition outline-none">
-        </div>
-
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block text-xs font-bold text-monety-textSub mb-1.5 uppercase tracking-wide">Contact Person</label>
-            <input id="newContact" placeholder="Optional" class="w-full bg-monety-bg border border-transparent rounded-2xl text-sm font-bold text-monety-textMain py-4 px-4 focus:bg-white focus:border-monety-blue focus:ring-4 focus:ring-monety-blue/10 transition outline-none">
+          <label class="block text-[13px] font-bold text-monety-textMain mt-2 mb-3">Status</label>
+          <div class="flex flex-col gap-2">
+            <!-- Planning (Blue) -->
+            <label class="block relative cursor-pointer" style="--radio-color: #6b7ded; --radio-bg: rgba(107, 125, 237, 0.08);">
+              <input type="radio" name="newStatusRadio" value="Planning" class="peer sr-only" checked>
+              <div class="radio-container p-4 rounded-[1.25rem] border border-transparent bg-monety-inputBg flex items-center gap-3 transition-all">
+                 <div class="radio-circle w-5 h-5 rounded-full border-2 border-monety-textSub flex items-center justify-center transition-colors">
+                    <div class="radio-dot w-2 h-2 rounded-full transition-all duration-200"></div>
+                 </div>
+                 <span class="font-bold text-monety-textMain text-sm">Planning</span>
+              </div>
+            </label>
+            <!-- Contacted (Yellow) -->
+            <label class="block relative cursor-pointer" style="--radio-color: #eab308; --radio-bg: rgba(234, 179, 8, 0.1);">
+              <input type="radio" name="newStatusRadio" value="Contacted" class="peer sr-only">
+              <div class="radio-container p-4 rounded-[1.25rem] border border-transparent bg-monety-inputBg flex items-center gap-3 transition-all">
+                 <div class="radio-circle w-5 h-5 rounded-full border-2 border-monety-textSub flex items-center justify-center transition-colors">
+                    <div class="radio-dot w-2 h-2 rounded-full transition-all duration-200"></div>
+                 </div>
+                 <span class="font-bold text-monety-textMain text-sm">Contacted</span>
+              </div>
+            </label>
+            <!-- Finalized (Green) -->
+            <label class="block relative cursor-pointer" style="--radio-color: #22c55e; --radio-bg: rgba(34, 197, 94, 0.1);">
+              <input type="radio" name="newStatusRadio" value="Finalized" class="peer sr-only">
+              <div class="radio-container p-4 rounded-[1.25rem] border border-transparent bg-monety-inputBg flex items-center gap-3 transition-all">
+                 <div class="radio-circle w-5 h-5 rounded-full border-2 border-monety-textSub flex items-center justify-center transition-colors">
+                    <div class="radio-dot w-2 h-2 rounded-full transition-all duration-200"></div>
+                 </div>
+                 <span class="font-bold text-monety-textMain text-sm">Finalized</span>
+              </div>
+            </label>
           </div>
-          <div>
-            <label class="block text-xs font-bold text-monety-textSub mb-1.5 uppercase tracking-wide">Phone</label>
-            <input id="newPhone" placeholder="Optional" class="w-full bg-monety-bg border border-transparent rounded-2xl text-sm font-bold text-monety-textMain py-4 px-4 focus:bg-white focus:border-monety-blue focus:ring-4 focus:ring-monety-blue/10 transition outline-none">
-          </div>
         </div>
 
-        <div>
-          <label class="block text-xs font-bold text-monety-textSub mb-1.5 uppercase tracking-wide">Status</label>
-          <select id="newStatus" class="w-full bg-monety-bg border border-transparent rounded-2xl text-sm font-bold text-monety-textMain py-4 pl-4 pr-10 focus:bg-white focus:border-monety-blue focus:ring-4 focus:ring-monety-blue/10 transition outline-none cursor-pointer">
-            <option value="Planning">Planning</option>
-            <option value="Contacted">Contacted</option>
-            <option value="Finalized">Finalized</option>
-          </select>
-        </div>
-
-        <div class="flex gap-3 mt-4">
-          <button id="masterDeleteBtn" onclick="triggerDeleteFromModal('master')" class="hidden bg-red-50 text-red-500 hover:bg-red-100 font-bold py-4 px-6 rounded-2xl transition-all active:scale-95 flex items-center justify-center">
+        <div class="flex gap-3 pt-4">
+          <button id="masterDeleteBtn" onclick="triggerDeleteFromModal('master')" class="hidden border-2 border-monety-border bg-white text-monety-textMain hover:bg-red-50 hover:text-red-500 hover:border-red-100 font-bold py-4 px-6 rounded-[1.5rem] transition-all active:scale-95 flex items-center justify-center shadow-sm">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
           </button>
-          <button id="masterModalBtn" onclick="saveMaster()" class="flex-1 bg-monety-textMain hover:bg-black text-white font-bold py-4 rounded-2xl shadow-card transition-all active:scale-95">Save Plan</button>
+          <button id="masterModalBtn" onclick="saveMaster()" class="flex-1 bg-[#a4d0a4] hover:bg-[#8eb88e] text-[#1e3b1e] font-extrabold text-base py-4 rounded-[1.5rem] transition-all active:scale-95 shadow-md">Add Plan</button>
         </div>
       </div>
     </div>
@@ -553,7 +667,7 @@
 
 <script type="module">
 // ==========================================
-// FIREBASE IMPORTS & SETUP (Preserved)
+// FIREBASE IMPORTS & SETUP 
 // ==========================================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -573,7 +687,7 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 
 // ==========================================
-// DATA ADAPTER LAYER (Preserved)
+// DATA ADAPTER LAYER
 // ==========================================
 const Adapter = {
   cleanString: (str) => {
@@ -597,7 +711,7 @@ const Adapter = {
       phone: d["Number"] || "-",
       status: d["Status"] || "Planning",
       budget: Adapter.cleanNumber(d["Total Budget"] || d["Fixed Budget"] || d.budget),
-      finalizedAmount: Adapter.cleanNumber(d["Finalized At"] || d.finalizedAmount) // Treated as a number now
+      finalizedAmount: Adapter.cleanNumber(d["Finalized At"] || d.finalizedAmount) 
     };
   },
   expense: (doc) => {
@@ -626,11 +740,12 @@ let state = {
   editingMasterId: null,
   editingExpenseId: null
 };
-let myChart = null;
+let statsChart = null;
+let homeDonut = null;
 let pendingDelete = { type: null, id: null };
 
 // ==========================================
-// UI INTERACTION HELPERS (Mobile Focused)
+// UI INTERACTION HELPERS (Custom Dropdowns)
 // ==========================================
 window.showTab = function(id) {
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
@@ -640,7 +755,6 @@ window.showTab = function(id) {
   document.getElementById('btn-' + id).classList.add('active');
 };
 
-// Bottom Sheet Modal Toggles
 window.toggleActionSheet = function() {
   const overlay = document.getElementById('addOverlay');
   const sheet = document.getElementById('addSheet');
@@ -655,7 +769,68 @@ window.toggleModal = function(overlayId, sheetId) {
   sheet.classList.toggle('open');
 };
 
-window.showConfirmDelete = function(type, id, name = '') {
+// Custom Dropdown Logic
+window.toggleCustomDropdown = function(menuId) {
+  const menu = document.getElementById(menuId);
+  const isHidden = menu.classList.contains('hidden');
+  
+  // Close all others
+  document.querySelectorAll('.custom-dd-menu').forEach(m => m.classList.add('hidden'));
+  
+  if (isHidden) menu.classList.remove('hidden');
+};
+
+window.openCustomDropdown = function(menuId) {
+  document.querySelectorAll('.custom-dd-menu').forEach(m => m.classList.add('hidden'));
+  const menu = document.getElementById(menuId);
+  if (menu) menu.classList.remove('hidden');
+};
+
+window.selectCustomValue = function(inputId, value) {
+  const input = document.getElementById(inputId);
+  if (input) {
+    input.value = value;
+    // Dispatch input event to trigger dependent filters
+    input.dispatchEvent(new Event('input')); 
+  }
+  const menu = document.getElementById(inputId + '-menu');
+  if (menu) menu.classList.add('hidden');
+};
+
+window.filterCustomDropdown = function(inputId, menuId) {
+  const val = document.getElementById(inputId).value.toLowerCase();
+  const menu = document.getElementById(menuId);
+  if (!menu) return;
+  const items = menu.querySelectorAll('.dd-item');
+  items.forEach(item => {
+    if(item.innerText.toLowerCase().includes(val)) {
+      item.classList.remove('hidden');
+    } else {
+      item.classList.add('hidden');
+    }
+  });
+};
+
+window.selectSort = function(inputId, value, label) {
+  document.getElementById(inputId).value = value;
+  document.getElementById(inputId + '-label').innerText = label;
+  document.getElementById(inputId + '-menu').classList.add('hidden');
+  
+  if(inputId === 'sortDashboard') renderDashboard();
+  if(inputId === 'sortExpenses') renderExpenses();
+  if(inputId === 'sortPlanning') renderPlanning();
+  if(inputId === 'sortVendors') renderVendors();
+};
+
+// Close dropdowns if clicking outside
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.custom-dd-container')) {
+    document.querySelectorAll('.custom-dd-menu').forEach(m => m.classList.add('hidden'));
+  }
+});
+
+
+window.showConfirmDelete = function(type, id) {
   pendingDelete = { type, id };
   if (type === 'master') {
     document.getElementById('confirmTitle').innerText = 'Delete Plan/Vendor?';
@@ -701,39 +876,49 @@ window.proceedDelete = async function() {
 
 window.openExpenseModal = function(id = null) {
   state.editingExpenseId = id;
+  const radios = document.getElementsByName('expTypeRadio');
+  
   if (id) {
     const exp = state.expenses.find(e => e.id === id);
     document.getElementById('expenseModalTitle').innerText = 'Edit Expense';
-    document.getElementById('expenseModalBtn').innerText = 'Update Expense';
+    document.getElementById('expenseModalBtn').innerText = 'Update';
     document.getElementById('expenseDeleteBtn').classList.remove('hidden');
     document.getElementById("expCategory").value = exp.category;
     window.updateSubDropdown("expCategory", "expSub");
     document.getElementById("expSub").value = exp.subcategory;
     document.getElementById("amount").value = exp.amount;
     document.getElementById("expDesc").value = exp.description === '-' ? '' : exp.description;
-    document.getElementById("expType").value = exp.paymentType;
     document.getElementById("expDate").value = exp.paymentDate;
     document.getElementById("expSource").value = exp.source === '-' ? '' : exp.source;
+    
+    // Set Radio
+    Array.from(radios).forEach(r => r.checked = (r.value === exp.paymentType));
   } else {
-    document.getElementById('expenseModalTitle').innerText = 'Log Expense';
-    document.getElementById('expenseModalBtn').innerText = 'Save Expense';
+    document.getElementById('expenseModalTitle').innerText = 'Add transaction';
+    document.getElementById('expenseModalBtn').innerText = 'Add';
     document.getElementById('expenseDeleteBtn').classList.add('hidden');
     document.getElementById("expCategory").value = "";
-    document.getElementById("expSub").innerHTML = '<option value="">Select</option>';
+    document.getElementById("expSub-menu").innerHTML = '<div class="px-4 py-3 text-sm font-medium text-monety-textSub">Select Category First</div>';
+    document.getElementById("expSub").value = "";
     document.getElementById("amount").value = "";
     document.getElementById("expDesc").value = "";
     document.getElementById('expDate').valueAsDate = new Date();
     document.getElementById("expSource").value = "";
+    
+    // Reset Radio to first
+    if(radios.length > 0) radios[0].checked = true;
   }
   toggleModal('expenseOverlay', 'expenseSheet');
 };
 
 window.openMasterModal = function(id = null) {
   state.editingMasterId = id;
+  const radios = document.getElementsByName('newStatusRadio');
+
   if (id) {
     const m = state.masters.find(x => x.id === id);
     document.getElementById('masterModalTitle').innerText = 'Edit Plan/Vendor';
-    document.getElementById('masterModalBtn').innerText = 'Update Details';
+    document.getElementById('masterModalBtn').innerText = 'Update';
     document.getElementById('masterDeleteBtn').classList.remove('hidden');
     document.getElementById("masterCategory").value = m.category;
     window.updateMasterSubDropdown();
@@ -743,21 +928,30 @@ window.openMasterModal = function(id = null) {
     document.getElementById("newPhone").value = m.phone === '-' ? '' : m.phone;
     document.getElementById("newBudget").value = m.budget || '';
     document.getElementById("newFinalizedAmount").value = m.finalizedAmount || '';
-    document.getElementById("newStatus").value = m.status;
+    
+    // Set Radio
+    Array.from(radios).forEach(r => r.checked = (r.value === m.status));
   } else {
     document.getElementById('masterModalTitle').innerText = 'Add Plan/Vendor';
-    document.getElementById('masterModalBtn').innerText = 'Save Plan';
+    document.getElementById('masterModalBtn').innerText = 'Add Plan';
     document.getElementById('masterDeleteBtn').classList.add('hidden');
-    document.querySelectorAll('#masterSheet input').forEach(input => input.value = '');
-    document.getElementById("newStatus").value = "Planning";
+    document.querySelectorAll('#masterSheet input[type="text"], #masterSheet input[type="number"]').forEach(input => input.value = '');
+    
+    // Reset Radio
+    if(radios.length > 0) radios[0].checked = true;
   }
   toggleModal('masterOverlay', 'masterSheet');
 };
 
 const formatCurrency = (amount) => new Intl.NumberFormat('en-IN').format(amount);
+const formatModernDate = (dateStr) => {
+  if (!dateStr || dateStr === '-') return '';
+  const opts = { month: 'short', day: '2-digit', year: 'numeric' };
+  return new Date(dateStr).toLocaleDateString('en-US', opts);
+};
 
 // ==========================================
-// SORTING UTILITY (Preserved)
+// SORTING UTILITY 
 // ==========================================
 const sortDataArray = (data, sortKey) => {
   return [...data].sort((a, b) => {
@@ -782,80 +976,65 @@ const sortDataArray = (data, sortKey) => {
 };
 
 // ==========================================
-// RENDER VIEWS (Monety Themed Cards)
+// RENDER VIEWS 
 // ==========================================
 
 function getIconForCategory(cat) {
   const c = cat.toLowerCase();
-  if (c.includes('food') || c.includes('cater')) return { bg: 'bg-orange-50', text: 'text-orange-500', icon: '🍲' };
-  if (c.includes('venue') || c.includes('hotel')) return { bg: 'bg-indigo-50', text: 'text-indigo-500', icon: '🏛️' };
-  if (c.includes('photo') || c.includes('video')) return { bg: 'bg-pink-50', text: 'text-pink-500', icon: '📸' };
-  if (c.includes('clothes') || c.includes('attire')) return { bg: 'bg-cyan-50', text: 'text-cyan-500', icon: '👗' };
-  if (c.includes('transport') || c.includes('travel')) return { bg: 'bg-rose-50', text: 'text-rose-500', icon: '🚗' };
-  if (c.includes('decor')) return { bg: 'bg-yellow-50', text: 'text-yellow-500', icon: '✨' };
-  return { bg: 'bg-blue-50', text: 'text-monety-blue', icon: '🛍️' };
+  if (c.includes('food') || c.includes('cater')) return { bg: 'bg-[#fff5eb]', text: 'text-[#d6985a]', icon: '🍲' };
+  if (c.includes('venue') || c.includes('hotel')) return { bg: 'bg-[#f0f4ff]', text: 'text-[#6b7ded]', icon: '🏛️' };
+  if (c.includes('photo') || c.includes('video')) return { bg: 'bg-[#fceef5]', text: 'text-[#ea7ca1]', icon: '📸' };
+  if (c.includes('clothes') || c.includes('attire')) return { bg: 'bg-[#eefafb]', text: 'text-[#58cad6]', icon: '👗' };
+  if (c.includes('transport') || c.includes('travel')) return { bg: 'bg-[#fcf0ec]', text: 'text-[#f79a83]', icon: '🚗' };
+  if (c.includes('decor')) return { bg: 'bg-[#fff9e6]', text: 'text-[#e0b538]', icon: '✨' };
+  return { bg: 'bg-monety-inputBg', text: 'text-monety-blue', icon: '🛍️' };
 }
 
 function renderDashboard() {
   const sortKey = document.getElementById('sortDashboard').value;
-  const sortedExpenses = sortDataArray(state.expenses, sortKey).slice(0, 5); // Show only top 5 recent
+  const sortedExpenses = sortDataArray(state.expenses, sortKey).slice(0, 5); 
   
-  // Calculate effective budget: use finalized amount if it exists, otherwise the estimate
   let totalEffectiveBudget = state.masters.reduce((sum, m) => {
     return sum + (m.finalizedAmount > 0 ? m.finalizedAmount : m.budget);
   }, 0);
   
   let totalSpent = state.expenses.reduce((sum, e) => sum + e.amount, 0);
+  const rem = totalEffectiveBudget - totalSpent;
   
   document.getElementById("summBudgetStat").innerText = formatCurrency(totalEffectiveBudget);
   document.getElementById("summPaid").innerText = formatCurrency(totalSpent);
-  
-  const rem = totalEffectiveBudget - totalSpent;
-  document.getElementById("summRem").innerText = formatCurrency(rem < 0 ? 0 : rem);
 
-  // Render recent expenses strictly like the "Monety" image lists
   let html = "";
-  let lastDateStr = "";
-
   sortedExpenses.forEach(e => {
-    const dStr = e.paymentDate === '-' ? 'Unspecified Date' : new Date(e.paymentDate).toLocaleDateString('en-GB', {weekday: 'long', day: 'numeric'});
-    
-    if (dStr !== lastDateStr && sortKey === 'date') {
-      html += `<div class="py-3 px-1 text-sm font-bold text-monety-textMain border-b border-monety-border flex justify-between">
-                  <span>${dStr}</span>
-               </div>`;
-      lastDateStr = dStr;
-    }
-
     const ic = getIconForCategory(e.category);
-    
     html += `
-      <div class="py-4 flex items-center justify-between group cursor-pointer" onclick="openExpenseModal('${e.id}')">
+      <div class="py-3 flex items-center justify-between cursor-pointer group" onclick="openExpenseModal('${e.id}')">
         <div class="flex items-center gap-4">
-          <div class="w-12 h-12 rounded-2xl ${ic.bg} ${ic.text} flex items-center justify-center text-xl shrink-0">
-            ${ic.icon}
+          <div class="w-12 h-12 rounded-[1.25rem] ${ic.bg} flex items-center justify-center shrink-0">
+            <span class="text-xl ${ic.text} opacity-90">${ic.icon}</span>
           </div>
           <div>
-            <h4 class="text-monety-textMain font-bold text-sm truncate max-w-[150px]">${e.subcategory}</h4>
-            <p class="text-monety-textSub text-xs mt-0.5 truncate max-w-[150px]">${e.description !== '-' ? e.description : e.category}</p>
+            <h4 class="text-monety-textMain font-extrabold text-[15px] mb-0.5 leading-tight">${e.subcategory}</h4>
+            <p class="text-monety-textSub text-[11px] font-bold tracking-wide">${e.paymentType || e.category}</p>
           </div>
         </div>
         <div class="text-right shrink-0">
-          <p class="text-monety-pink font-extrabold text-sm">-₹${formatCurrency(e.amount)}</p>
-          <p class="text-monety-textSub text-[10px] mt-1 uppercase tracking-wide opacity-0 group-hover:opacity-100 transition">Tap to edit</p>
+          <p class="text-monety-textMain font-extrabold text-[15px] mb-0.5 leading-tight">-₹${formatCurrency(e.amount)}</p>
+          <p class="text-monety-textSub text-[11px] font-bold tracking-wide">${formatModernDate(e.paymentDate)}</p>
         </div>
       </div>
     `;
   });
 
-  document.getElementById("dashboardExpensesList").innerHTML = html || `<div class="text-center py-6 text-monety-textSub text-sm font-medium">No recent expenses</div>`;
+  document.getElementById("dashboardExpensesList").innerHTML = html || `<div class="text-center py-6 text-monety-textSub text-sm font-bold">No recent expenses</div>`;
   
-  // Prepare chart data map for statistics tab
+  drawHomeDonut(totalSpent, rem < 0 ? 0 : rem);
+  
   const chartDataMap = {};
   state.expenses.forEach(e => {
     chartDataMap[e.category] = (chartDataMap[e.category] || 0) + e.amount;
   });
-  drawChart(chartDataMap);
+  drawStatsChart(chartDataMap);
 }
 
 function renderExpenses() {
@@ -866,28 +1045,25 @@ function renderExpenses() {
   sorted.forEach(e => {
     const ic = getIconForCategory(e.category);
     html += `
-      <div class="bg-white rounded-3xl p-4 shadow-sm border border-monety-border flex items-center justify-between relative overflow-hidden group">
-        <div class="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-red-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-end pr-4 pointer-events-none">
-             <button onclick="showConfirmDelete('expense', '${e.id}'); event.stopPropagation();" class="w-8 h-8 bg-white rounded-full shadow-sm text-red-500 flex items-center justify-center pointer-events-auto hover:bg-red-50"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
-        </div>
-        <div class="flex items-center gap-4 cursor-pointer flex-1" onclick="openExpenseModal('${e.id}')">
-          <div class="w-12 h-12 rounded-2xl ${ic.bg} ${ic.text} flex items-center justify-center text-xl shrink-0">
-            ${ic.icon}
+      <div class="bg-monety-inputBg rounded-[1.5rem] p-4 flex items-center justify-between cursor-pointer" onclick="openExpenseModal('${e.id}')">
+        <div class="flex items-center gap-4 flex-1">
+          <div class="w-12 h-12 rounded-[1.25rem] ${ic.bg} flex items-center justify-center shrink-0">
+            <span class="text-xl ${ic.text} opacity-90">${ic.icon}</span>
           </div>
           <div>
-            <h4 class="text-monety-textMain font-bold text-sm">${e.subcategory}</h4>
-            <p class="text-monety-textSub text-xs mt-0.5">${e.paymentType}</p>
+            <h4 class="text-monety-textMain font-extrabold text-[15px] mb-0.5 leading-tight">${e.subcategory}</h4>
+            <p class="text-monety-textSub text-[11px] font-bold tracking-wide">${e.paymentType || e.category}</p>
           </div>
         </div>
-        <div class="text-right shrink-0 z-10 bg-white pl-2">
-          <p class="text-monety-pink font-extrabold text-sm">-₹${formatCurrency(e.amount)}</p>
-          <p class="text-monety-textSub text-[10px] mt-0.5">${e.paymentDate !== '-' ? e.paymentDate : ''}</p>
+        <div class="text-right shrink-0">
+          <p class="text-monety-textMain font-extrabold text-[15px] mb-0.5 leading-tight">-₹${formatCurrency(e.amount)}</p>
+          <p class="text-monety-textSub text-[11px] font-bold tracking-wide">${formatModernDate(e.paymentDate)}</p>
         </div>
       </div>
     `;
   });
 
-  document.getElementById("expensesGrid").innerHTML = html || `<div class="text-center py-10 text-monety-textSub text-sm font-medium">No expenses logged yet</div>`;
+  document.getElementById("expensesGrid").innerHTML = html || `<div class="text-center py-10 text-monety-textSub text-sm font-bold">No expenses logged yet</div>`;
 }
 
 function renderPlanning() {
@@ -897,45 +1073,35 @@ function renderPlanning() {
   let html = "";
   sorted.forEach(m => {
     const ic = getIconForCategory(m.category);
-    let statusDot = "bg-gray-300";
-    if(m.status === 'Finalized') statusDot = "bg-green-400";
-    if(m.status === 'Contacted') statusDot = "bg-yellow-400";
+    let statusColor = "bg-monety-textSub";
+    if(m.status === 'Finalized') statusColor = "bg-green-500";
+    if(m.status === 'Contacted') statusColor = "bg-yellow-400";
 
     const effBudget = m.finalizedAmount > 0 ? m.finalizedAmount : m.budget;
     const hasFinalized = m.finalizedAmount > 0;
 
     html += `
-      <div class="bg-white rounded-3xl p-5 shadow-sm border border-monety-border group relative overflow-hidden">
-        <div class="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-red-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-end pr-4 pointer-events-none">
-             <button onclick="showConfirmDelete('master', '${m.id}'); event.stopPropagation();" class="w-8 h-8 bg-white rounded-full shadow-sm text-red-500 flex items-center justify-center pointer-events-auto hover:bg-red-50"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
+      <div class="bg-monety-inputBg rounded-[1.5rem] p-4 flex items-center justify-between cursor-pointer" onclick="openMasterModal('${m.id}')">
+        <div class="flex items-center gap-4">
+           <div class="w-12 h-12 rounded-[1.25rem] ${ic.bg} flex items-center justify-center shrink-0 relative">
+             <span class="text-xl ${ic.text} opacity-90">${ic.icon}</span>
+             <span class="absolute -top-1 -right-1 w-3.5 h-3.5 border-2 border-monety-inputBg rounded-full ${statusColor}"></span>
+           </div>
+           <div>
+              <h4 class="text-monety-textMain font-extrabold text-[15px] mb-0.5 leading-tight">${m.subcategory}</h4>
+              <p class="text-monety-textSub text-[11px] font-bold tracking-wide">${m.category}</p>
+           </div>
         </div>
-        <div class="flex items-center justify-between cursor-pointer" onclick="openMasterModal('${m.id}')">
-          <div class="flex items-center gap-4">
-             <div class="w-12 h-12 rounded-2xl ${ic.bg} ${ic.text} flex items-center justify-center text-xl shrink-0">
-               ${ic.icon}
-             </div>
-             <div>
-                <div class="flex items-center gap-2">
-                  <h4 class="text-monety-textMain font-bold text-sm">${m.subcategory}</h4>
-                  <span class="w-2 h-2 rounded-full ${statusDot}"></span>
-                </div>
-                <p class="text-monety-textSub text-xs mt-0.5">${m.category}</p>
-             </div>
-          </div>
-          <div class="text-right shrink-0 bg-white z-10 pl-2">
-             <p class="text-monety-textMain font-extrabold text-sm flex items-center justify-end gap-1">
-               ₹${formatCurrency(effBudget)} 
-               ${hasFinalized ? '<svg class="w-3 h-3 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>' : ''}
-             </p>
-             ${hasFinalized ? 
-               `<p class="text-monety-textSub text-[10px] mt-0.5 line-through">₹${formatCurrency(m.budget)}</p>` : 
-               `<p class="text-monety-textSub text-[10px] mt-0.5">Estimated</p>`}
-          </div>
+        <div class="text-right shrink-0 pl-2">
+           <p class="text-monety-textMain font-extrabold text-[15px] mb-0.5 leading-tight">₹${formatCurrency(effBudget)}</p>
+           ${hasFinalized ? 
+             `<p class="text-monety-textSub text-[11px] font-bold tracking-wide line-through">₹${formatCurrency(m.budget)}</p>` : 
+             `<p class="text-monety-textSub text-[11px] font-bold tracking-wide text-amber-500/80">Est.</p>`}
         </div>
       </div>`;
   });
 
-  document.getElementById("planGrid").innerHTML = html || `<div class="text-center py-10 text-monety-textSub text-sm font-medium">No plans added yet</div>`;
+  document.getElementById("planGrid").innerHTML = html || `<div class="text-center py-10 text-monety-textSub text-sm font-bold">No plans added yet</div>`;
 }
 
 function renderVendors() {
@@ -943,19 +1109,11 @@ function renderVendors() {
   const seenNames = new Set();
   
   const filtered = state.masters.filter(m => {
-    // Only include specific vendor-related categories
     if (!vendorCategories.includes(m.category)) return false;
-    
-    // Determine the actual display name (fallback to subcategory if name is empty)
     const displayName = (m.name && m.name !== '-') ? m.name : m.subcategory;
     const normalizedName = String(displayName).trim().toUpperCase();
-    
-    // Filter out empty, dash, 'NA', or uncategorized entries
     if (!normalizedName || normalizedName === '-' || normalizedName === 'NA' || normalizedName === 'UNCATEGORIZED') return false;
-    
-    // Ensure uniqueness so duplicate vendor rows don't show up
     if (seenNames.has(normalizedName)) return false;
-    
     seenNames.add(normalizedName);
     return true;
   });
@@ -966,51 +1124,73 @@ function renderVendors() {
   let html = "";
   sorted.forEach(m => {
     html += `
-      <div class="bg-white rounded-[2rem] p-5 shadow-sm border border-monety-border cursor-pointer relative" onclick="openMasterModal('${m.id}')">
+      <div class="bg-monety-inputBg rounded-[1.5rem] p-5 cursor-pointer relative" onclick="openMasterModal('${m.id}')">
         <div class="flex justify-between items-start mb-3">
           <div>
-            <span class="text-[10px] font-extrabold text-monety-blue bg-monety-blue/10 px-2 py-1 rounded-lg uppercase tracking-wider">${m.category}</span>
-            <h4 class="text-monety-textMain font-bold text-lg mt-2">${m.name !== '-' ? m.name : m.subcategory}</h4>
+            <span class="text-[10px] font-extrabold text-monety-blue uppercase tracking-wider">${m.category}</span>
+            <h4 class="text-monety-textMain font-extrabold text-lg mt-1 tracking-tight">${m.name !== '-' ? m.name : m.subcategory}</h4>
           </div>
         </div>
         
         <div class="space-y-2 mt-4">
           ${m.contact !== '-' ? `
             <div class="flex items-center gap-3 text-sm">
-              <div class="w-8 h-8 rounded-full bg-monety-bg flex items-center justify-center text-monety-textSub"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg></div>
-              <span class="text-monety-textMain font-medium">${m.contact}</span>
+              <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-monety-textSub shadow-sm"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg></div>
+              <span class="text-monety-textMain font-bold">${m.contact}</span>
             </div>` : ''}
           ${m.phone !== '-' ? `
             <div class="flex items-center gap-3 text-sm">
-              <div class="w-8 h-8 rounded-full bg-monety-bg flex items-center justify-center text-monety-textSub"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg></div>
-              <span class="text-monety-textMain font-medium"><a href="tel:${m.phone}" class="text-monety-blue hover:underline" onclick="event.stopPropagation()">${m.phone}</a></span>
+              <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-monety-textSub shadow-sm"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg></div>
+              <span class="text-monety-textMain font-bold"><a href="tel:${m.phone}" class="text-monety-blue hover:underline" onclick="event.stopPropagation()">${m.phone}</a></span>
             </div>` : ''}
         </div>
       </div>
     `;
   });
 
-  document.getElementById("vendorsGrid").innerHTML = html || `<div class="text-center py-10 text-monety-textSub text-sm font-medium">No vendors found.</div>`;
+  document.getElementById("vendorsGrid").innerHTML = html || `<div class="text-center py-10 text-monety-textSub text-sm font-bold">No vendors found.</div>`;
 }
 
-function drawChart(dataMap) {
+function drawHomeDonut(spent, remaining) {
+  const ctx = document.getElementById('homeDonutChart').getContext('2d');
+  if(homeDonut) homeDonut.destroy();
+
+  homeDonut = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Spent', 'Remaining'],
+      datasets: [{
+        data: [spent, remaining || 1], 
+        backgroundColor: ['#ea7ca1', '#a4d0a4'], 
+        borderWidth: 0,
+        cutout: '72%'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { enabled: false } },
+      animation: { duration: 800 }
+    }
+  });
+}
+
+function drawStatsChart(dataMap) {
   const ctx = document.getElementById('expenseChart').getContext('2d');
   const labels = Object.keys(dataMap).filter(k => dataMap[k] > 0);
   const data = labels.map(k => dataMap[k]);
 
-  if(myChart) myChart.destroy();
+  if(statsChart) statsChart.destroy();
 
-  // Monety-inspired chart styling
-  myChart = new Chart(ctx, {
+  statsChart = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: labels.map(l => l.substring(0,6) + '...'), // Shorten labels for mobile
+      labels: labels.map(l => l.substring(0,6) + '..'),
       datasets: [{
         data: data,
         backgroundColor: ['#58cad6', '#6b7ded', '#ea7ca1', '#f79a83', '#5465ce'],
-        borderRadius: 8,
-        borderSkipped: false,
-        barThickness: 24,
+        borderRadius: 6,
+        barThickness: 20,
       }]
     },
     options: {
@@ -1019,7 +1199,7 @@ function drawChart(dataMap) {
       plugins: {
         legend: { display: false },
         tooltip: {
-          backgroundColor: '#2d3142',
+          backgroundColor: '#1e2029',
           padding: 12,
           cornerRadius: 12,
           displayColors: false,
@@ -1028,14 +1208,14 @@ function drawChart(dataMap) {
       },
       scales: {
         y: { display: false, grid: { display: false } },
-        x: { grid: { display: false }, border: { display: false }, ticks: { font: { family: "'Plus Jakarta Sans', sans-serif", size: 10, weight: '600' }, color: '#9ba1b9' } }
+        x: { grid: { display: false }, border: { display: false }, ticks: { font: { family: "'Plus Jakarta Sans', sans-serif", size: 10, weight: '700' }, color: '#8e94a8' } }
       }
     }
   });
 }
 
 // ==========================================
-// INIT, AUTH & DATA FETCHING (Preserved Logic)
+// INIT, AUTH & DATA FETCHING
 // ==========================================
 async function init() {
   try {
@@ -1108,13 +1288,24 @@ async function loadExpenses() {
 
 function syncDropdowns() {
   const cats = [...state.categories].sort();
-  const expCatEl = document.getElementById("expCategory");
-  expCatEl.innerHTML = '<option value="">Select</option>';
-  cats.forEach(c => expCatEl.innerHTML += `<option value="${c}">${c}</option>`);
+  
+  // Custom Expense Category Menu
+  const expCatMenu = document.getElementById("expCategory-menu");
+  if(expCatMenu) {
+    expCatMenu.innerHTML = '';
+    cats.forEach(c => {
+       expCatMenu.innerHTML += `<div class="px-4 py-3 rounded-xl hover:bg-monety-inputBg cursor-pointer font-bold text-sm text-monety-textMain transition-colors dd-item" onclick="selectCustomValue('expCategory', '${c}'); updateSubDropdown('expCategory','expSub');">${c}</div>`;
+    });
+  }
 
-  const masterCatList = document.getElementById("masterCategoryList");
-  masterCatList.innerHTML = "";
-  cats.forEach(c => masterCatList.innerHTML += `<option value="${c}">`);
+  // Custom Master Category Menu
+  const masterCatMenu = document.getElementById("masterCategory-menu");
+  if(masterCatMenu) {
+    masterCatMenu.innerHTML = '';
+    cats.forEach(c => {
+       masterCatMenu.innerHTML += `<div class="px-4 py-3 rounded-xl hover:bg-monety-inputBg cursor-pointer font-bold text-sm text-monety-textMain transition-colors dd-item" onclick="selectCustomValue('masterCategory', '${c}'); updateMasterSubDropdown();">${c}</div>`;
+    });
+  }
   
   window.updateSubDropdown("expCategory", "expSub");
   if(typeof window.updateMasterSubDropdown === 'function') {
@@ -1124,21 +1315,33 @@ function syncDropdowns() {
 
 window.updateSubDropdown = function(catId, subId) {
   const cat = document.getElementById(catId).value;
-  const sub = document.getElementById(subId);
-  sub.innerHTML = '<option value="">Select</option>';
-  if (state.subMap[cat]) {
-    [...state.subMap[cat]].sort().forEach(s => sub.innerHTML += `<option value="${s}">${s}</option>`);
+  const subMenu = document.getElementById(subId + "-menu");
+  if (!subMenu) return;
+  
+  subMenu.innerHTML = '';
+  document.getElementById(subId).value = ''; 
+
+  if (state.subMap[cat] && state.subMap[cat].size > 0) {
+    [...state.subMap[cat]].sort().forEach(s => {
+        subMenu.innerHTML += `<div class="px-4 py-3 rounded-xl hover:bg-monety-inputBg cursor-pointer font-bold text-sm text-monety-textMain transition-colors dd-item" onclick="selectCustomValue('${subId}', '${s}')">${s}</div>`;
+    });
+  } else {
+     subMenu.innerHTML = `<div class="px-4 py-3 text-sm font-medium text-monety-textSub">No subcategories found</div>`;
   }
 };
 
 window.updateMasterSubDropdown = function() {
   const cat = document.getElementById("masterCategory").value;
-  const subList = document.getElementById("masterSubCategoryList");
-  if(subList) {
-    subList.innerHTML = '';
-    if (state.subMap[cat]) {
-      [...state.subMap[cat]].sort().forEach(s => subList.innerHTML += `<option value="${s}">`);
-    }
+  const subMenu = document.getElementById("newSub-menu");
+  if (!subMenu) return;
+  
+  subMenu.innerHTML = '';
+  if (state.subMap[cat] && state.subMap[cat].size > 0) {
+    [...state.subMap[cat]].sort().forEach(s => {
+       subMenu.innerHTML += `<div class="px-4 py-3 rounded-xl hover:bg-monety-inputBg cursor-pointer font-bold text-sm text-monety-textMain transition-colors dd-item" onclick="selectCustomValue('newSub', '${s}')">${s}</div>`;
+    });
+  } else {
+      subMenu.innerHTML = `<div class="px-4 py-3 text-sm font-medium text-monety-textSub">No subcategories found</div>`;
   }
 };
 
@@ -1152,7 +1355,7 @@ window.saveMaster = async function() {
     "Name": document.getElementById("newName").value.trim() || "-",
     "Contact": document.getElementById("newContact").value.trim() || "-",
     "Number": document.getElementById("newPhone").value.trim() || "-",
-    "Status": document.getElementById("newStatus").value,
+    "Status": document.querySelector('input[name="newStatusRadio"]:checked')?.value || "Planning",
     "Total Budget": Number(document.getElementById("newBudget").value) || 0,
     "Finalized At": Number(document.getElementById("newFinalizedAmount").value) || 0
   };
@@ -1173,7 +1376,8 @@ window.saveExpense = async function() {
   const payload = {
     category, subcategory: sub,
     description: document.getElementById("expDesc").value.trim() || "-",
-    amount, paymentType: document.getElementById("expType").value,
+    amount, 
+    paymentType: document.querySelector('input[name="expTypeRadio"]:checked')?.value || "-",
     paymentDate: document.getElementById("expDate").value || "-",
     source: document.getElementById("expSource").value.trim() || "-"
   };
