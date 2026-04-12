@@ -107,8 +107,28 @@
       color: #6b7ded;
     }
 
+    /* Standardized Select Dropdown Styling */
     input, select {
       -webkit-appearance: none;
+      appearance: none;
+    }
+    
+    select, input[list] {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239ba1b9'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      background-size: 1.2em;
+    }
+
+    /* Hide the native datalist dropdown arrow to prevent double arrows, but keep it clickable */
+    input[list]::-webkit-calendar-picker-indicator {
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    select.sort-dropdown {
+      background-position: right 0.5rem center;
+      background-size: 1em;
     }
   </style>
 </head>
@@ -215,7 +235,7 @@
 
         <div class="flex justify-between items-end mb-4">
           <h3 class="text-lg font-extrabold text-monety-textMain">Recent Expenses</h3>
-          <select id="sortDashboard" onchange="renderDashboard()" class="text-xs bg-white border border-monety-border rounded-lg py-1.5 px-2 text-monety-textSub font-medium shadow-sm focus:outline-none">
+          <select id="sortDashboard" onchange="renderDashboard()" class="sort-dropdown text-xs bg-white border border-monety-border rounded-lg py-1.5 pl-3 pr-7 text-monety-textSub font-bold shadow-sm focus:outline-none focus:ring-2 focus:ring-monety-blue/20 transition cursor-pointer">
             <option value="date">Newest</option>
             <option value="amount">Highest</option>
           </select>
@@ -259,7 +279,7 @@
 
         <div class="flex justify-between items-end mb-4">
           <h3 class="text-lg font-extrabold text-monety-textMain">All Expenses</h3>
-          <select id="sortExpenses" onchange="renderExpenses()" class="text-xs bg-white border border-monety-border rounded-lg py-1.5 px-2 text-monety-textSub font-medium shadow-sm focus:outline-none">
+          <select id="sortExpenses" onchange="renderExpenses()" class="sort-dropdown text-xs bg-white border border-monety-border rounded-lg py-1.5 pl-3 pr-7 text-monety-textSub font-bold shadow-sm focus:outline-none focus:ring-2 focus:ring-monety-blue/20 transition cursor-pointer">
             <option value="date">Newest</option>
             <option value="amount">High to Low</option>
             <option value="category">Category</option>
@@ -277,7 +297,7 @@
 
         <div class="flex justify-between items-end mb-4">
           <h3 class="text-sm font-bold text-monety-textSub uppercase tracking-wider">Allocations</h3>
-          <select id="sortPlanning" onchange="renderPlanning()" class="text-xs bg-white border border-monety-border rounded-lg py-1.5 px-2 text-monety-textSub font-medium shadow-sm focus:outline-none">
+          <select id="sortPlanning" onchange="renderPlanning()" class="sort-dropdown text-xs bg-white border border-monety-border rounded-lg py-1.5 pl-3 pr-7 text-monety-textSub font-bold shadow-sm focus:outline-none focus:ring-2 focus:ring-monety-blue/20 transition cursor-pointer">
             <option value="status">Status</option>
             <option value="category">Category</option>
             <option value="amount">High to Low</option>
@@ -295,7 +315,7 @@
         <p class="text-sm text-monety-textSub font-medium mb-6">Venue, vendors, and transport</p>
 
         <div class="flex justify-between items-end mb-4 hidden">
-          <select id="sortVendors" onchange="renderVendors()" class="text-xs bg-white border border-monety-border rounded-lg py-1.5 px-2 text-monety-textSub font-medium shadow-sm focus:outline-none">
+          <select id="sortVendors" onchange="renderVendors()" class="sort-dropdown text-xs bg-white border border-monety-border rounded-lg py-1.5 pl-3 pr-7 text-monety-textSub font-bold shadow-sm focus:outline-none focus:ring-2 focus:ring-monety-blue/20 transition cursor-pointer">
             <option value="category">Category</option>
             <option value="name">A-Z</option>
           </select>
@@ -401,20 +421,20 @@
           <label class="block text-xs font-bold text-monety-textSub mb-1.5 uppercase tracking-wide">Amount *</label>
           <div class="relative">
             <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-monety-pink font-bold text-xl">₹</span>
-            <input id="amount" type="number" placeholder="0" class="w-full bg-monety-bg border border-transparent rounded-2xl text-monety-textMain font-bold text-xl py-3 pl-10 pr-4 focus:bg-white focus:border-monety-blue focus:ring-4 focus:ring-monety-blue/10 transition outline-none">
+            <input id="amount" type="number" placeholder="0" class="w-full bg-monety-bg border border-transparent rounded-2xl text-monety-textMain font-bold text-xl py-4 pl-10 pr-4 focus:bg-white focus:border-monety-blue focus:ring-4 focus:ring-monety-blue/10 transition outline-none">
           </div>
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block text-xs font-bold text-monety-textSub mb-1.5 uppercase tracking-wide">Category *</label>
-            <select id="expCategory" onchange="updateSubDropdown('expCategory','expSub')" class="w-full bg-monety-bg border border-transparent rounded-2xl text-sm font-medium text-monety-textMain py-4 px-4 focus:bg-white focus:border-monety-blue outline-none">
+            <select id="expCategory" onchange="updateSubDropdown('expCategory','expSub')" class="w-full bg-monety-bg border border-transparent rounded-2xl text-sm font-bold text-monety-textMain py-4 pl-4 pr-10 focus:bg-white focus:border-monety-blue focus:ring-4 focus:ring-monety-blue/10 transition outline-none cursor-pointer">
               <option value="">Select</option>
             </select>
           </div>
           <div>
             <label class="block text-xs font-bold text-monety-textSub mb-1.5 uppercase tracking-wide">Subcategory *</label>
-            <select id="expSub" class="w-full bg-monety-bg border border-transparent rounded-2xl text-sm font-medium text-monety-textMain py-4 px-4 focus:bg-white focus:border-monety-blue outline-none">
+            <select id="expSub" class="w-full bg-monety-bg border border-transparent rounded-2xl text-sm font-bold text-monety-textMain py-4 pl-4 pr-10 focus:bg-white focus:border-monety-blue focus:ring-4 focus:ring-monety-blue/10 transition outline-none cursor-pointer">
               <option value="">Select</option>
             </select>
           </div>
@@ -422,13 +442,13 @@
 
         <div>
           <label class="block text-xs font-bold text-monety-textSub mb-1.5 uppercase tracking-wide">Description</label>
-          <input id="expDesc" placeholder="What was this for?" class="w-full bg-monety-bg border border-transparent rounded-2xl text-sm font-medium text-monety-textMain py-4 px-4 focus:bg-white focus:border-monety-blue outline-none">
+          <input id="expDesc" placeholder="What was this for?" class="w-full bg-monety-bg border border-transparent rounded-2xl text-sm font-bold text-monety-textMain py-4 px-4 focus:bg-white focus:border-monety-blue focus:ring-4 focus:ring-monety-blue/10 transition outline-none">
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block text-xs font-bold text-monety-textSub mb-1.5 uppercase tracking-wide">Type</label>
-            <select id="expType" class="w-full bg-monety-bg border border-transparent rounded-2xl text-sm font-medium text-monety-textMain py-4 px-4 focus:bg-white focus:border-monety-blue outline-none">
+            <select id="expType" class="w-full bg-monety-bg border border-transparent rounded-2xl text-sm font-bold text-monety-textMain py-4 pl-4 pr-10 focus:bg-white focus:border-monety-blue focus:ring-4 focus:ring-monety-blue/10 transition outline-none cursor-pointer">
               <option value="UPI">UPI</option>
               <option value="Cash">Cash</option>
               <option value="Credit Card">Card</option>
@@ -437,16 +457,21 @@
           </div>
           <div>
             <label class="block text-xs font-bold text-monety-textSub mb-1.5 uppercase tracking-wide">Date</label>
-            <input id="expDate" type="date" class="w-full bg-monety-bg border border-transparent rounded-2xl text-sm font-medium text-monety-textMain py-4 px-4 focus:bg-white focus:border-monety-blue outline-none">
+            <input id="expDate" type="date" class="w-full bg-monety-bg border border-transparent rounded-2xl text-sm font-bold text-monety-textMain py-4 px-4 focus:bg-white focus:border-monety-blue focus:ring-4 focus:ring-monety-blue/10 transition outline-none">
           </div>
         </div>
 
         <div>
           <label class="block text-xs font-bold text-monety-textSub mb-1.5 uppercase tracking-wide">Source</label>
-          <input id="expSource" placeholder="e.g. Joint Account" class="w-full bg-monety-bg border border-transparent rounded-2xl text-sm font-medium text-monety-textMain py-4 px-4 focus:bg-white focus:border-monety-blue outline-none">
+          <input id="expSource" placeholder="e.g. Joint Account" class="w-full bg-monety-bg border border-transparent rounded-2xl text-sm font-bold text-monety-textMain py-4 px-4 focus:bg-white focus:border-monety-blue focus:ring-4 focus:ring-monety-blue/10 transition outline-none">
         </div>
 
-        <button id="expenseModalBtn" onclick="saveExpense()" class="w-full bg-monety-blue hover:bg-monety-blueDark text-white font-bold py-4 rounded-2xl shadow-card transition-all active:scale-95 mt-4">Save Expense</button>
+        <div class="flex gap-3 mt-4">
+          <button id="expenseDeleteBtn" onclick="triggerDeleteFromModal('expense')" class="hidden bg-red-50 text-red-500 hover:bg-red-100 font-bold py-4 px-6 rounded-2xl transition-all active:scale-95 flex items-center justify-center">
+             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+          </button>
+          <button id="expenseModalBtn" onclick="saveExpense()" class="flex-1 bg-monety-blue hover:bg-monety-blueDark text-white font-bold py-4 rounded-2xl shadow-card transition-all active:scale-95">Save Expense</button>
+        </div>
       </div>
     </div>
   </div>
@@ -464,15 +489,15 @@
           <div>
             <label class="block text-xs font-bold text-monety-textSub mb-1.5 uppercase tracking-wide">Est. Budget (₹) *</label>
             <div class="relative">
-              <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-monety-blue font-bold">₹</span>
-              <input id="newBudget" type="number" placeholder="0" class="w-full bg-monety-bg border border-transparent rounded-2xl text-sm font-bold text-monety-textMain py-3 pl-8 pr-3 focus:bg-white focus:border-monety-blue transition outline-none">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-monety-blue font-bold">₹</span>
+              <input id="newBudget" type="number" placeholder="0" class="w-full bg-monety-bg border border-transparent rounded-2xl text-sm font-bold text-monety-textMain py-4 pl-10 pr-4 focus:bg-white focus:border-monety-blue focus:ring-4 focus:ring-monety-blue/10 transition outline-none">
             </div>
           </div>
           <div>
             <label class="block text-xs font-bold text-monety-textSub mb-1.5 uppercase tracking-wide">Finalized Amt (₹)</label>
             <div class="relative">
-              <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-monety-blue font-bold">₹</span>
-              <input id="newFinalizedAmount" type="number" placeholder="0" class="w-full bg-monety-bg border border-transparent rounded-2xl text-sm font-bold text-monety-textMain py-3 pl-8 pr-3 focus:bg-white focus:border-monety-blue transition outline-none">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-monety-blue font-bold">₹</span>
+              <input id="newFinalizedAmount" type="number" placeholder="0" class="w-full bg-monety-bg border border-transparent rounded-2xl text-sm font-bold text-monety-textMain py-4 pl-10 pr-4 focus:bg-white focus:border-monety-blue focus:ring-4 focus:ring-monety-blue/10 transition outline-none">
             </div>
           </div>
         </div>
@@ -480,41 +505,47 @@
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block text-xs font-bold text-monety-textSub mb-1.5 uppercase tracking-wide">Category *</label>
-            <input list="masterCategoryList" id="masterCategory" placeholder="Type/Pick" class="w-full bg-monety-bg border border-transparent rounded-2xl text-sm font-medium text-monety-textMain py-4 px-4 focus:bg-white focus:border-monety-blue outline-none">
+            <input list="masterCategoryList" id="masterCategory" oninput="updateMasterSubDropdown()" placeholder="Type/Pick" class="w-full bg-monety-bg border border-transparent rounded-2xl text-sm font-bold text-monety-textMain py-4 pl-4 pr-10 focus:bg-white focus:border-monety-blue focus:ring-4 focus:ring-monety-blue/10 transition outline-none cursor-pointer">
             <datalist id="masterCategoryList"></datalist>
           </div>
           <div>
             <label class="block text-xs font-bold text-monety-textSub mb-1.5 uppercase tracking-wide">Subcategory *</label>
-            <input id="newSub" placeholder="e.g. Rent" class="w-full bg-monety-bg border border-transparent rounded-2xl text-sm font-medium text-monety-textMain py-4 px-4 focus:bg-white focus:border-monety-blue outline-none">
+            <input list="masterSubCategoryList" id="newSub" placeholder="e.g. Rent" class="w-full bg-monety-bg border border-transparent rounded-2xl text-sm font-bold text-monety-textMain py-4 pl-4 pr-10 focus:bg-white focus:border-monety-blue focus:ring-4 focus:ring-monety-blue/10 transition outline-none cursor-pointer">
+            <datalist id="masterSubCategoryList"></datalist>
           </div>
         </div>
 
         <div>
           <label class="block text-xs font-bold text-monety-textSub mb-1.5 uppercase tracking-wide">Vendor Name</label>
-          <input id="newName" placeholder="Optional" class="w-full bg-monety-bg border border-transparent rounded-2xl text-sm font-medium text-monety-textMain py-4 px-4 focus:bg-white focus:border-monety-blue outline-none">
+          <input id="newName" placeholder="Optional" class="w-full bg-monety-bg border border-transparent rounded-2xl text-sm font-bold text-monety-textMain py-4 px-4 focus:bg-white focus:border-monety-blue focus:ring-4 focus:ring-monety-blue/10 transition outline-none">
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block text-xs font-bold text-monety-textSub mb-1.5 uppercase tracking-wide">Contact Person</label>
-            <input id="newContact" placeholder="Optional" class="w-full bg-monety-bg border border-transparent rounded-2xl text-sm font-medium text-monety-textMain py-4 px-4 focus:bg-white focus:border-monety-blue outline-none">
+            <input id="newContact" placeholder="Optional" class="w-full bg-monety-bg border border-transparent rounded-2xl text-sm font-bold text-monety-textMain py-4 px-4 focus:bg-white focus:border-monety-blue focus:ring-4 focus:ring-monety-blue/10 transition outline-none">
           </div>
           <div>
             <label class="block text-xs font-bold text-monety-textSub mb-1.5 uppercase tracking-wide">Phone</label>
-            <input id="newPhone" placeholder="Optional" class="w-full bg-monety-bg border border-transparent rounded-2xl text-sm font-medium text-monety-textMain py-4 px-4 focus:bg-white focus:border-monety-blue outline-none">
+            <input id="newPhone" placeholder="Optional" class="w-full bg-monety-bg border border-transparent rounded-2xl text-sm font-bold text-monety-textMain py-4 px-4 focus:bg-white focus:border-monety-blue focus:ring-4 focus:ring-monety-blue/10 transition outline-none">
           </div>
         </div>
 
         <div>
           <label class="block text-xs font-bold text-monety-textSub mb-1.5 uppercase tracking-wide">Status</label>
-          <select id="newStatus" class="w-full bg-monety-bg border border-transparent rounded-2xl text-sm font-medium text-monety-textMain py-4 px-4 focus:bg-white focus:border-monety-blue outline-none">
+          <select id="newStatus" class="w-full bg-monety-bg border border-transparent rounded-2xl text-sm font-bold text-monety-textMain py-4 pl-4 pr-10 focus:bg-white focus:border-monety-blue focus:ring-4 focus:ring-monety-blue/10 transition outline-none cursor-pointer">
             <option value="Planning">Planning</option>
             <option value="Contacted">Contacted</option>
             <option value="Finalized">Finalized</option>
           </select>
         </div>
 
-        <button id="masterModalBtn" onclick="saveMaster()" class="w-full bg-monety-textMain hover:bg-black text-white font-bold py-4 rounded-2xl shadow-card transition-all active:scale-95 mt-4">Save Plan</button>
+        <div class="flex gap-3 mt-4">
+          <button id="masterDeleteBtn" onclick="triggerDeleteFromModal('master')" class="hidden bg-red-50 text-red-500 hover:bg-red-100 font-bold py-4 px-6 rounded-2xl transition-all active:scale-95 flex items-center justify-center">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+          </button>
+          <button id="masterModalBtn" onclick="saveMaster()" class="flex-1 bg-monety-textMain hover:bg-black text-white font-bold py-4 rounded-2xl shadow-card transition-all active:scale-95">Save Plan</button>
+        </div>
       </div>
     </div>
   </div>
@@ -634,6 +665,16 @@ window.showConfirmDelete = function(type, id, name = '') {
   toggleModal('confirmModal', 'confirmSheet');
 };
 
+window.triggerDeleteFromModal = function(type) {
+  if (type === 'expense' && state.editingExpenseId) {
+    showConfirmDelete('expense', state.editingExpenseId);
+    toggleModal('expenseOverlay', 'expenseSheet');
+  } else if (type === 'master' && state.editingMasterId) {
+    showConfirmDelete('master', state.editingMasterId);
+    toggleModal('masterOverlay', 'masterSheet');
+  }
+};
+
 window.cancelDelete = function() {
   pendingDelete = { type: null, id: null };
   document.getElementById('confirmModal').classList.remove('open');
@@ -664,6 +705,7 @@ window.openExpenseModal = function(id = null) {
     const exp = state.expenses.find(e => e.id === id);
     document.getElementById('expenseModalTitle').innerText = 'Edit Expense';
     document.getElementById('expenseModalBtn').innerText = 'Update Expense';
+    document.getElementById('expenseDeleteBtn').classList.remove('hidden');
     document.getElementById("expCategory").value = exp.category;
     window.updateSubDropdown("expCategory", "expSub");
     document.getElementById("expSub").value = exp.subcategory;
@@ -675,6 +717,7 @@ window.openExpenseModal = function(id = null) {
   } else {
     document.getElementById('expenseModalTitle').innerText = 'Log Expense';
     document.getElementById('expenseModalBtn').innerText = 'Save Expense';
+    document.getElementById('expenseDeleteBtn').classList.add('hidden');
     document.getElementById("expCategory").value = "";
     document.getElementById("expSub").innerHTML = '<option value="">Select</option>';
     document.getElementById("amount").value = "";
@@ -691,7 +734,9 @@ window.openMasterModal = function(id = null) {
     const m = state.masters.find(x => x.id === id);
     document.getElementById('masterModalTitle').innerText = 'Edit Plan/Vendor';
     document.getElementById('masterModalBtn').innerText = 'Update Details';
+    document.getElementById('masterDeleteBtn').classList.remove('hidden');
     document.getElementById("masterCategory").value = m.category;
+    window.updateMasterSubDropdown();
     document.getElementById("newSub").value = m.subcategory;
     document.getElementById("newName").value = m.name === '-' ? '' : m.name;
     document.getElementById("newContact").value = m.contact === '-' ? '' : m.contact;
@@ -702,6 +747,7 @@ window.openMasterModal = function(id = null) {
   } else {
     document.getElementById('masterModalTitle').innerText = 'Add Plan/Vendor';
     document.getElementById('masterModalBtn').innerText = 'Save Plan';
+    document.getElementById('masterDeleteBtn').classList.add('hidden');
     document.querySelectorAll('#masterSheet input').forEach(input => input.value = '');
     document.getElementById("newStatus").value = "Planning";
   }
@@ -795,7 +841,7 @@ function renderDashboard() {
           </div>
         </div>
         <div class="text-right shrink-0">
-          <p class="text-monety-pink font-extrabold text-sm">-$${formatCurrency(e.amount)}</p>
+          <p class="text-monety-pink font-extrabold text-sm">-₹${formatCurrency(e.amount)}</p>
           <p class="text-monety-textSub text-[10px] mt-1 uppercase tracking-wide opacity-0 group-hover:opacity-100 transition">Tap to edit</p>
         </div>
       </div>
@@ -834,7 +880,7 @@ function renderExpenses() {
           </div>
         </div>
         <div class="text-right shrink-0 z-10 bg-white pl-2">
-          <p class="text-monety-pink font-extrabold text-sm">-$${formatCurrency(e.amount)}</p>
+          <p class="text-monety-pink font-extrabold text-sm">-₹${formatCurrency(e.amount)}</p>
           <p class="text-monety-textSub text-[10px] mt-0.5">${e.paymentDate !== '-' ? e.paymentDate : ''}</p>
         </div>
       </div>
@@ -894,7 +940,26 @@ function renderPlanning() {
 
 function renderVendors() {
   const vendorCategories = ['Venue', 'Vendor', 'Transportation'];
-  const filtered = state.masters.filter(m => vendorCategories.includes(m.category));
+  const seenNames = new Set();
+  
+  const filtered = state.masters.filter(m => {
+    // Only include specific vendor-related categories
+    if (!vendorCategories.includes(m.category)) return false;
+    
+    // Determine the actual display name (fallback to subcategory if name is empty)
+    const displayName = (m.name && m.name !== '-') ? m.name : m.subcategory;
+    const normalizedName = String(displayName).trim().toUpperCase();
+    
+    // Filter out empty, dash, 'NA', or uncategorized entries
+    if (!normalizedName || normalizedName === '-' || normalizedName === 'NA' || normalizedName === 'UNCATEGORIZED') return false;
+    
+    // Ensure uniqueness so duplicate vendor rows don't show up
+    if (seenNames.has(normalizedName)) return false;
+    
+    seenNames.add(normalizedName);
+    return true;
+  });
+
   const sortKey = document.getElementById('sortVendors').value || 'name';
   const sorted = sortDataArray(filtered, sortKey);
   
@@ -1050,7 +1115,11 @@ function syncDropdowns() {
   const masterCatList = document.getElementById("masterCategoryList");
   masterCatList.innerHTML = "";
   cats.forEach(c => masterCatList.innerHTML += `<option value="${c}">`);
+  
   window.updateSubDropdown("expCategory", "expSub");
+  if(typeof window.updateMasterSubDropdown === 'function') {
+    window.updateMasterSubDropdown();
+  }
 }
 
 window.updateSubDropdown = function(catId, subId) {
@@ -1059,6 +1128,17 @@ window.updateSubDropdown = function(catId, subId) {
   sub.innerHTML = '<option value="">Select</option>';
   if (state.subMap[cat]) {
     [...state.subMap[cat]].sort().forEach(s => sub.innerHTML += `<option value="${s}">${s}</option>`);
+  }
+};
+
+window.updateMasterSubDropdown = function() {
+  const cat = document.getElementById("masterCategory").value;
+  const subList = document.getElementById("masterSubCategoryList");
+  if(subList) {
+    subList.innerHTML = '';
+    if (state.subMap[cat]) {
+      [...state.subMap[cat]].sort().forEach(s => subList.innerHTML += `<option value="${s}">`);
+    }
   }
 };
 
