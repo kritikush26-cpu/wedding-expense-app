@@ -1,103 +1,98 @@
-# 💍 Wedding Expense App
+# 💍 Our Wedding - Budget Tracker
 
-A modern, real-time wedding budget tracker with vendor management and expense tracking powered by Firebase.
+A beautiful, modern wedding budget tracker designed to help couples easily monitor and manage their wedding expenses. Built with a clean, intuitive interface featuring real-time calculations, visual analytics, and comprehensive expense tracking.
 
 ## Features
 
-✨ **Budget Tracker**
-- Track budgets by category (Venue, Catering, Decor, etc.)
-- Monitor planned vs actual spending
-- Real-time budget calculations
-- Visual expense breakdown with charts
+### 📊 **Dashboard**
+- Visual doughnut chart showing spent vs budget allocation
+- Key metrics at a glance:
+  - **You've Spent**: Track actual expenses against total budget
+  - **Total Planned Expense**: Sum of all budgeted amounts
+  - **Payments Made**: Total amount already paid out
+  - **Future Payments**: Upcoming expenses to be paid
+- **Spent by Source**: Breakdown of expenses by payment source/vendor
 
-📊 **Expense Management**
-- Log individual expenses
-- Categorize by vendor and type
-- Track payment methods and dates
-- Filter and sort by multiple criteria
+### 📈 **Statistics & Analytics**
+- Comprehensive expense analytics with doughnut chart visualization
+- View total spent across all categories
+- Dynamic category legend with color coding
+- Expense history with full details (All Expenses list)
+- Smart sorting options for expense data
 
-🎯 **Vendor Directory**
-- Manage venue, vendor, and transportation contacts
-- Track vendor status (Planning, Contacted, Finalized)
-- Store contact information
-- Budget allocation per vendor
+### 💰 **Expense Management**
+- Log individual expenses with full details
+- Categorize expenses by type and vendor
+- Track payment methods and transaction dates
+- Multiple sorting options:
+  - By amount (High to Low, Low to High)
+  - By date (Newest to Oldest, Oldest to Newest)
+  - By category
+  - By vendor/source
 
-🔄 **Real-Time Sync**
-- Firebase Firestore integration
-- Auto-refresh on all changes
-- Cloud-based data sync
+### 🏖️ **Budget Planning**
+- Create and manage budget plans by category and vendor
+- Track planned amounts vs actual spending
+- Monitor vendor status throughout planning process
+- Real-time budget calculations and updates
+
+### 🔐 **Secure Access**
+- Email and password authentication
+- Personalized dashboard for each user ("Hello, Lovebirds")
+- Logout functionality
+- Secure session management
 
 ## Tech Stack
 
-- **Frontend**: HTML5, Tailwind CSS, Chart.js
-- **Backend**: Firebase Firestore
+- **Frontend**: 
+  - HTML5
+  - Tailwind CSS (responsive design framework)
+  - Chart.js (data visualization)
+  - Plus Jakarta Sans font (modern typography)
+  
+- **Backend**: Firebase Firestore (cloud database)
 - **Authentication**: Firebase Auth
-- **Hosting**: GitHub Pages / Firebase
+- **Design**: Modern, mobile-optimized UI with smooth animations
 
 ## Getting Started
 
-### Option 1: Live Demo
-Visit the deployed app at: https://kritikush26-cpu.github.io/wedding-expense-app/
+### Quick Start
+Simply open `index.html` in your web browser to get started. The application features a responsive design that works seamlessly on desktop, tablet, and mobile devices.
 
-### Option 2: Local Setup
+### Navigation
+The app uses a bottom navigation bar with multiple tabs:
+1. **Dashboard** - Home view with overview and key metrics
+2. **Statistics** - Detailed expense analytics and breakdowns
+3. Additional tabs for budget planning and expense management
 
-1. Clone the repository:
-```bash
-git clone https://github.com/kritikush26-cpu/wedding-expense-app.git
-cd wedding-expense-app
-```
+## User Interface Highlights
 
-2. Open `index.html` in your browser
+- **Clean, Minimalist Design**: Built with Tailwind CSS and a custom color palette (soft lavender blue, candy rose pink)
+- **Smooth Animations**: Fade and scale transitions for tab switching
+- **Responsive Layout**: Mobile-first design with max-width container (420px on desktop)
+- **Interactive Charts**: Visual representations of budget data using Chart.js
+- **Bottom Sheet Modals**: Modern modal interface for data entry
+- **Custom Radio Inputs**: Styled form elements with color customization
 
-3. Configure Firebase credentials in the code (if needed)
+## Features Breakdown
 
-## Usage
+### Calculations & Summaries
+- Real-time sum calculations for total budget and expenses
+- Automatic tracking of paid vs future payments
+- Per-source expense consolidation
+- Dynamic legend generation for chart categories
 
-### Budget Planning
-1. Go to "Budget Planning" tab
-2. Click "Add Plan" button
-3. Enter category, vendor name, and budget
-4. Track changes in real-time
+### Data Organization
+- Budget tracking by category and vendor
+- Expense logging with transaction details
+- Source-based expense breakdown
+- Status tracking for planning purposes
 
-### Log Expenses
-1. Navigate to "Recent Expenses" tab
-2. Click "Log Expense" button
-3. Add transaction details
-4. View updated dashboard summary
-
-### Analyze Spending
-- Use sort options to organize by budget, status, or date
-- Check dashboard cards for budget vs actual spending
-- View expense breakdown chart by category
-
-## Features in Detail
-
-### Smart Sorting (6 options per view)
-- Alphabetical (Category/Subcategory/Name)
-- Budget Range (High-Low, Low-High)
-- Status (Planning → Contacted → Finalized)
-- Date Range (Newest/Oldest for expenses)
-
-### Custom Confirmations
-- Modern, non-native delete confirmations
-- Glass-morphism backdrop design
-- Clear action messaging
-
-### Real-Time Calculations
-- Total Budget: Sum of all planned amounts
-- Total Spent: Sum of actual expenses only
-- Remaining: Budget minus actual spending
-- Per-category breakdowns with charts
-
-## Data Structure
-
-### Masters Collection (Budget/Vendors)
-```json
-{
-  "Master Category": "Venue",
-  "Sub Category": "Banquet Hall",
-  "Name": "Grand Palace",
-  "Status": "Finalized",
+### Visual Feedback
+- Animated loading indicators (pulse effect)
+- Toast notifications for user actions
+- Modal confirmations for critical actions
+- Status indicator for real-time data sync
   "Fixed Budget": 150000,
   "Contact": "john@grandpalace.com",
   "Number": "+91-9876543210",
