@@ -200,48 +200,62 @@
       <!-- ================= DASHBOARD TAB (Home) ================= -->
       <div id="dashboardTab" class="tab-content active">
 
-        <!-- Dashboard Hero Card -->
-        <div class="bg-white rounded-[2rem] p-6 mb-8 flex items-center justify-between border border-monety-border mt-2 shadow-card">
-          <div class="space-y-4">
-            <div>
-              <div class="flex items-center gap-2 mb-1">
-                 <div class="w-1 h-3 bg-[#c4b5fd] rounded-full"></div> <!-- Lavender -->
-                 <p class="text-[11px] font-bold text-monety-textSub uppercase tracking-wider">Total Budget</p>
-              </div>
-              <h3 class="text-2xl font-extrabold text-monety-textMain ml-3 tracking-tight">₹<span id="summBudgetStat">0</span></h3>
-            </div>
-            <div>
-              <div class="flex items-center gap-2 mb-1">
-                 <div class="w-1 h-3 bg-monety-pink rounded-full"></div> <!-- Pink -->
-                 <p class="text-[11px] font-bold text-monety-textSub uppercase tracking-wider">Spent</p>
-              </div>
-              <h3 class="text-xl font-bold text-monety-textMain ml-3 tracking-tight">₹<span id="summPaid">0</span></h3>
-            </div>
-          </div>
-          <!-- Donut Chart Canvas -->
-          <div class="w-24 h-24 relative">
+        <!-- Layer 1: Modern Doughnut Hero Card -->
+        <div class="bg-white rounded-[2rem] p-6 mb-4 shadow-card border border-monety-border flex flex-col items-center mt-2">
+          
+          <div class="relative w-56 h-56 mb-5 mt-2">
              <canvas id="homeDonutChart"></canvas>
+             <!-- Inner Text Overlay -->
+             <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none mt-1">
+               <p class="text-[11px] font-bold text-monety-textSub uppercase tracking-wider mb-0.5">You've Spent</p>
+               <h3 class="text-2xl font-extrabold text-monety-textMain tracking-tight">₹<span id="donutSpent">0</span></h3>
+               <p class="text-[11px] font-bold text-monety-textSub tracking-wide mt-0.5">of ₹<span id="donutBudget">0</span></p>
+             </div>
+          </div>
+
+          <!-- Dynamic Doughnut Legend -->
+          <div id="donutLegend" class="w-full flex flex-wrap justify-center gap-x-5 gap-y-3 px-2">
+            <!-- Rendered via JS -->
+          </div>
+
+        </div>
+
+        <!-- Layer 1.5: Total Planned Expense Slim Card -->
+        <div class="bg-white rounded-[1.5rem] py-3.5 px-5 mb-5 shadow-sm border border-monety-border flex items-center justify-between">
+          <div class="flex items-center gap-3">
+             <div class="w-8 h-8 rounded-full bg-[#f5f3ff] text-monety-blue flex items-center justify-center">
+               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+             </div>
+             <p class="text-[11px] font-bold text-monety-textSub uppercase tracking-wider">Total Planned Expense</p>
+          </div>
+          <h4 class="text-base font-extrabold text-monety-textMain tracking-tight">₹<span id="summPlannedExplicit">0</span></h4>
+        </div>
+
+        <!-- Layer 2: Quick Metrics Split -->
+        <div class="grid grid-cols-2 gap-4 mb-6">
+          <div class="bg-white rounded-[1.5rem] p-5 shadow-sm border border-monety-border">
+            <div class="w-8 h-8 rounded-full bg-[#fdf2f8] text-monety-pink flex items-center justify-center mb-3">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+            </div>
+            <p class="text-[10px] font-bold text-monety-textSub uppercase tracking-wider mb-1">Payments Made</p>
+            <h4 class="text-lg font-extrabold text-monety-textMain tracking-tight">₹<span id="summPaid">0</span></h4>
+          </div>
+          
+          <div class="bg-white rounded-[1.5rem] p-5 shadow-sm border border-monety-border">
+            <div class="w-8 h-8 rounded-full bg-[#f5f3ff] text-monety-blue flex items-center justify-center mb-3">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
+            </div>
+            <p class="text-[10px] font-bold text-monety-textSub uppercase tracking-wider mb-1">Future Payments</p>
+            <h4 class="text-lg font-extrabold text-monety-textMain tracking-tight">₹<span id="summFuture">0</span></h4>
           </div>
         </div>
 
-        <div class="flex justify-between items-center mb-4">
-          <h3 class="text-base font-extrabold text-monety-textMain">Recent transactions</h3>
-          <!-- Modern Custom Sort Dropdown -->
-          <div class="relative custom-dd-container">
-            <div class="flex items-center gap-1.5 text-[11px] uppercase tracking-wider font-bold text-monety-textMain cursor-pointer bg-white rounded-full py-1.5 px-4 shadow-sm border border-monety-border hover:bg-gray-50 transition-colors" onclick="toggleCustomDropdown('sortDashboard-menu')">
-              <span id="sortDashboard-label">Newest</span>
-              <svg class="w-3.5 h-3.5 text-monety-textSub" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path></svg>
-            </div>
-            <input type="hidden" id="sortDashboard" value="date">
-            <div id="sortDashboard-menu" class="custom-dd-menu hidden absolute top-full right-0 mt-2 w-36 bg-white rounded-2xl shadow-dropdown z-[60] border border-monety-border p-2 flex flex-col gap-1">
-              <div class="px-4 py-3 rounded-xl text-sm font-bold hover:bg-monety-bg cursor-pointer transition-colors text-monety-textMain dd-item" onclick="selectSort('sortDashboard', 'date', 'Newest')">Newest</div>
-              <div class="px-4 py-3 rounded-xl text-sm font-bold hover:bg-monety-bg cursor-pointer transition-colors text-monety-textMain dd-item" onclick="selectSort('sortDashboard', 'amount', 'Highest')">Highest</div>
-            </div>
-          </div>
+        <!-- Layer 3: Source Account Consolidation -->
+        <div class="flex justify-between items-center mb-4 mt-2">
+          <h3 class="text-base font-extrabold text-monety-textMain">Spent by Source</h3>
         </div>
         
-        <!-- Simplified List container -->
-        <div id="dashboardExpensesList" class="space-y-3">
+        <div id="sourceConsolidationList" class="space-y-4 pb-4">
           <!-- Rendered via JS -->
         </div>
 
@@ -249,16 +263,33 @@
 
       <!-- ================= STATS/EXPENSES TAB ================= -->
       <div id="expensesTab" class="tab-content">
-        <h2 class="text-2xl font-extrabold text-monety-textMain mb-6">Statistic</h2>
-
-        <div class="flex justify-between items-end mb-4">
-          <h3 class="text-base font-extrabold text-monety-textMain">Expense Breakdown</h3>
-          <span class="text-[10px] bg-white border border-monety-border px-3 py-1 rounded-full text-monety-textMain font-bold shadow-sm">Category</span>
+        <div class="flex items-center justify-between mb-6">
+           <h2 class="text-2xl font-extrabold text-monety-textMain">Statistic</h2>
         </div>
 
-        <div class="bg-white rounded-[2rem] p-5 border border-monety-border mb-8 shadow-card">
-          <div class="relative h-48 w-full">
-            <canvas id="expenseChart"></canvas>
+        <div class="bg-white rounded-[2rem] p-6 border border-monety-border mb-8 shadow-card mt-2 flex flex-col items-center">
+          <div class="w-full flex justify-between items-center mb-1">
+            <h3 class="text-xs font-bold text-monety-textSub flex items-center gap-1.5">
+              Expense Analytics
+              <svg class="w-3.5 h-3.5 text-monety-textSub opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </h3>
+            <div class="bg-monety-bg px-3 py-1.5 rounded-full text-[10px] font-bold text-monety-textMain flex items-center gap-1 cursor-pointer border border-monety-border shadow-sm">
+              Category <svg class="w-3 h-3 text-monety-textSub" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path></svg>
+            </div>
+          </div>
+          
+          <div class="relative w-56 h-56 mb-5 mt-4">
+             <canvas id="expenseChart"></canvas>
+             <!-- Inner Text Overlay -->
+             <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none mt-1">
+               <p class="text-[11px] font-bold text-monety-textSub uppercase tracking-wider mb-0.5">Total Spent</p>
+               <h3 class="text-2xl font-extrabold text-monety-textMain tracking-tight">₹<span id="statsTotalSpent">0</span></h3>
+             </div>
+          </div>
+
+          <!-- Dynamic Doughnut Legend -->
+          <div id="statsDonutLegend" class="w-full flex flex-wrap justify-center gap-x-5 gap-y-3 px-2">
+            <!-- Rendered via JS -->
           </div>
         </div>
 
@@ -267,19 +298,20 @@
           <!-- Modern Custom Sort Dropdown -->
           <div class="relative custom-dd-container">
             <div class="flex items-center gap-1.5 text-[11px] uppercase tracking-wider font-bold text-monety-textMain cursor-pointer bg-white border border-monety-border rounded-full py-1.5 px-4 shadow-sm hover:bg-gray-50 transition-colors" onclick="toggleCustomDropdown('sortExpenses-menu')">
-              <span id="sortExpenses-label">Newest</span>
+              <span id="sortExpenses-label">Highest Spend</span>
               <svg class="w-3.5 h-3.5 text-monety-textSub" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path></svg>
             </div>
-            <input type="hidden" id="sortExpenses" value="date">
+            <input type="hidden" id="sortExpenses" value="amount">
             <div id="sortExpenses-menu" class="custom-dd-menu hidden absolute top-full right-0 mt-2 w-40 bg-white rounded-2xl shadow-dropdown z-[60] border border-monety-border p-2 flex flex-col gap-1">
-              <div class="px-4 py-3 rounded-xl text-sm font-bold hover:bg-monety-bg cursor-pointer transition-colors text-monety-textMain dd-item" onclick="selectSort('sortExpenses', 'date', 'Newest')">Newest</div>
-              <div class="px-4 py-3 rounded-xl text-sm font-bold hover:bg-monety-bg cursor-pointer transition-colors text-monety-textMain dd-item" onclick="selectSort('sortExpenses', 'amount', 'High to Low')">High to Low</div>
+              <div class="px-4 py-3 rounded-xl text-sm font-bold hover:bg-monety-bg cursor-pointer transition-colors text-monety-textMain dd-item" onclick="selectSort('sortExpenses', 'amount', 'Highest Spend')">Highest Spend</div>
+              <div class="px-4 py-3 rounded-xl text-sm font-bold hover:bg-monety-bg cursor-pointer transition-colors text-monety-textMain dd-item" onclick="selectSort('sortExpenses', 'name', 'A-Z')">A-Z</div>
               <div class="px-4 py-3 rounded-xl text-sm font-bold hover:bg-monety-bg cursor-pointer transition-colors text-monety-textMain dd-item" onclick="selectSort('sortExpenses', 'category', 'Category')">Category</div>
             </div>
           </div>
         </div>
 
-        <div id="expensesGrid" class="space-y-3">
+        <!-- Consolidated Grid View -->
+        <div id="expensesGrid" class="space-y-4 pb-4">
           <!-- Rendered via JS -->
         </div>
       </div>
@@ -305,7 +337,7 @@
           </div>
         </div>
 
-        <div id="planGrid" class="space-y-3">
+        <div id="planGrid" class="space-y-3 pb-4">
           <!-- Rendered via JS -->
         </div>
       </div>
@@ -330,7 +362,7 @@
           </div>
         </div>
 
-        <div id="vendorsGrid" class="space-y-3">
+        <div id="vendorsGrid" class="space-y-3 pb-4">
           <!-- Rendered via JS -->
         </div>
       </div>
@@ -372,6 +404,36 @@
 
 
   <!-- ================= BOTTOM SHEETS & MODALS ================= -->
+
+  <!-- Universal Granular Details Sheet (Sources & Categories) -->
+  <div id="granularDetailsOverlay" class="fixed inset-0 z-50 overlay bg-[#1e1b4b]/40 backdrop-blur-sm flex items-end justify-center" onclick="toggleModal('granularDetailsOverlay', 'granularDetailsSheet')">
+    <div id="granularDetailsSheet" class="w-full max-w-[420px] bg-monety-bg rounded-t-[2rem] p-6 bottom-sheet shadow-modal h-[92vh] overflow-y-auto hide-scroll flex flex-col" onclick="event.stopPropagation()">
+      <div class="flex justify-between items-center mb-5 shrink-0">
+        <button onclick="toggleModal('granularDetailsOverlay', 'granularDetailsSheet')" class="w-10 h-10 bg-white shadow-sm border border-monety-border rounded-full flex items-center justify-center text-monety-textMain hover:bg-gray-50 transition-colors"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 12H5m7 7l-7-7 7-7"></path></svg></button>
+        <div class="text-center">
+          <h3 id="granularDetailsTitle" class="text-lg font-extrabold text-monety-textMain tracking-tight">Detail View</h3>
+          <p id="granularDetailsTotal" class="text-xs font-bold text-monety-textSub mt-0.5 tracking-wide">₹0 Spent</p>
+        </div>
+        <div class="w-10 h-10"></div> <!-- Spacer -->
+      </div>
+      
+      <div class="flex-1 overflow-y-auto hide-scroll pb-10">
+        <!-- New Age Trend Chart -->
+        <div class="bg-white rounded-[2rem] p-5 shadow-sm border border-monety-border mb-6">
+          <h4 class="text-[11px] font-bold text-monety-textSub uppercase tracking-wider mb-3">Spending Trend</h4>
+          <div class="relative h-40 w-full">
+            <canvas id="granularTrendChart"></canvas>
+          </div>
+        </div>
+        
+        <!-- Timeline History -->
+        <h4 class="text-[11px] font-bold text-monety-textSub uppercase tracking-wider mb-4 ml-2 mt-2">Transaction History</h4>
+        <div id="granularTimelineList" class="relative pl-4 border-l-[3px] border-monety-border border-dashed space-y-6 ml-2 pb-4">
+           <!-- Rendered via JS -->
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Add Action Sheet -->
   <div id="addOverlay" class="fixed inset-0 z-50 overlay bg-[#1e1b4b]/40 backdrop-blur-sm flex items-end justify-center" onclick="toggleActionSheet()">
@@ -737,6 +799,7 @@ let state = {
 };
 let statsChart = null;
 let homeDonut = null;
+let granularChartInstance = null;
 let pendingDelete = { type: null, id: null };
 
 // ==========================================
@@ -785,7 +848,6 @@ window.selectCustomValue = function(inputId, value) {
   const input = document.getElementById(inputId);
   if (input) {
     input.value = value;
-    // Dispatch input event to trigger dependent filters
     input.dispatchEvent(new Event('input')); 
   }
   const menu = document.getElementById(inputId + '-menu');
@@ -811,13 +873,11 @@ window.selectSort = function(inputId, value, label) {
   document.getElementById(inputId + '-label').innerText = label;
   document.getElementById(inputId + '-menu').classList.add('hidden');
   
-  if(inputId === 'sortDashboard') renderDashboard();
   if(inputId === 'sortExpenses') renderExpenses();
   if(inputId === 'sortPlanning') renderPlanning();
   if(inputId === 'sortVendors') renderVendors();
 };
 
-// Close dropdowns if clicking outside
 document.addEventListener('click', (e) => {
   if (!e.target.closest('.custom-dd-container')) {
     document.querySelectorAll('.custom-dd-menu').forEach(m => m.classList.add('hidden'));
@@ -945,30 +1005,172 @@ const formatModernDate = (dateStr) => {
   return new Date(dateStr).toLocaleDateString('en-US', opts);
 };
 
+// Convert hex to rgb string for chart gradients
+function hexToRgba(hex, alpha) {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
+// Custom Hash Color Generator for dynamic text sources
+function getDynamicColorStyle(str) {
+  const palettes = [
+    { hex: '#fb7185', bg: 'bg-[#fff5f8]', text: 'text-[#fb7185]', border: 'border-[#fce7f3]' }, // Pink
+    { hex: '#a78bfa', bg: 'bg-[#f5f3ff]', text: 'text-[#a78bfa]', border: 'border-[#ede9fe]' }, // Lavender
+    { hex: '#2dd4bf', bg: 'bg-[#f0fdfa]', text: 'text-[#2dd4bf]', border: 'border-[#ccfbf1]' }, // Teal
+    { hex: '#fb923c', bg: 'bg-[#fff7ed]', text: 'text-[#fb923c]', border: 'border-[#ffedd5]' }, // Peach
+    { hex: '#38bdf8', bg: 'bg-[#f0f9ff]', text: 'text-[#38bdf8]', border: 'border-[#e0f2fe]' }, // Cyan
+  ];
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  return palettes[Math.abs(hash) % palettes.length];
+}
+
 // ==========================================
-// SORTING UTILITY 
+// UNIVERSAL GRANULAR DETAILS LOGIC
 // ==========================================
-const sortDataArray = (data, sortKey) => {
-  return [...data].sort((a, b) => {
-    if (sortKey === 'category') return a.category.localeCompare(b.category) || a.subcategory.localeCompare(b.subcategory);
-    if (sortKey === 'amount') {
-        const amtA = a.finalizedAmount > 0 ? a.finalizedAmount : (a.budget || a.amount || 0);
-        const amtB = b.finalizedAmount > 0 ? b.finalizedAmount : (b.budget || b.amount || 0);
-        return amtB - amtA;
-    }
-    if (sortKey === 'date') {
-       const dA = new Date(a.paymentDate || '1970-01-01');
-       const dB = new Date(b.paymentDate || '1970-01-01');
-       return dB - dA; 
-    }
-    if (sortKey === 'status') {
-       const order = { 'Planning': 1, 'Contacted': 2, 'Finalized': 3 };
-       return (order[a.status] || 0) - (order[b.status] || 0) || a.subcategory.localeCompare(b.subcategory);
-    }
-    if (sortKey === 'name') return (a.name || a.subcategory || '').localeCompare(b.name || b.subcategory || '');
-    return 0;
+window.openGranularDetails = function(type, val1, val2) {
+  let filteredExpenses = [];
+  let titleText = "";
+  let themeColorHex = "";
+
+  if (type === 'source') {
+    titleText = val1;
+    const styleInfo = getDynamicColorStyle(val1);
+    themeColorHex = styleInfo.hex;
+    
+    filteredExpenses = state.expenses.filter(e => {
+      const s = (e.source && e.source !== '-' && e.source.trim() !== '') ? e.source.trim() : 'Unspecified';
+      return s === val1;
+    });
+  } else if (type === 'category') {
+    titleText = val2; // Subcategory
+    const catStyle = getIconForCategory(val1); // Use standard category colors
+    
+    // We map bg classes back to a hex for the chart line. It's a rough approximation for the canvas.
+    if (val1.toLowerCase().includes('food') || val1.toLowerCase().includes('cater')) themeColorHex = '#fb7185';
+    else if (val1.toLowerCase().includes('venue') || val1.toLowerCase().includes('hotel')) themeColorHex = '#a78bfa';
+    else if (val1.toLowerCase().includes('photo') || val1.toLowerCase().includes('video')) themeColorHex = '#f43f5e';
+    else if (val1.toLowerCase().includes('clothes') || val1.toLowerCase().includes('attire')) themeColorHex = '#2dd4bf';
+    else if (val1.toLowerCase().includes('transport') || val1.toLowerCase().includes('travel')) themeColorHex = '#fb923c';
+    else if (val1.toLowerCase().includes('decor')) themeColorHex = '#eab308';
+    else themeColorHex = '#38bdf8';
+
+    filteredExpenses = state.expenses.filter(e => e.category === val1 && e.subcategory === val2);
+  }
+  
+  // Sort descending for timeline
+  filteredExpenses.sort((a,b) => new Date(b.paymentDate) - new Date(a.paymentDate)); 
+  
+  // Calculate Total
+  const total = filteredExpenses.reduce((sum, e) => sum + e.amount, 0);
+  document.getElementById('granularDetailsTitle').innerText = titleText;
+  document.getElementById('granularDetailsTotal').innerText = `₹${formatCurrency(total)} Spent`;
+  
+  // Draw Timeline List
+  let timelineHtml = '';
+  if (filteredExpenses.length === 0) {
+    timelineHtml = `<p class="text-xs text-monety-textSub font-bold pl-4 py-4">No transactions found.</p>`;
+  } else {
+    filteredExpenses.forEach(e => {
+       const ic = getIconForCategory(e.category);
+       timelineHtml += `
+         <div class="relative group cursor-pointer" onclick="openExpenseModal('${e.id}')">
+            <!-- Timeline Dot -->
+            <div class="absolute -left-[23.5px] top-[22px] w-3.5 h-3.5 bg-white border-[3px] border-[${themeColorHex}] rounded-full shadow-sm z-10 group-hover:scale-125 transition-transform"></div>
+            
+            <div class="bg-white rounded-[1.25rem] p-4 shadow-sm border border-monety-border flex items-center justify-between hover:bg-gray-50 transition-colors">
+               <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl ${ic.bg} flex items-center justify-center shrink-0">
+                     <span class="text-lg ${ic.text} opacity-90">${ic.icon}</span>
+                  </div>
+                  <div>
+                     <h4 class="font-extrabold text-[13px] text-monety-textMain leading-tight mb-0.5">${e.subcategory}</h4>
+                     <p class="text-[10px] font-bold text-monety-textSub tracking-wide">${formatModernDate(e.paymentDate)}</p>
+                  </div>
+               </div>
+               <div class="text-right">
+                  <p class="font-extrabold text-[14px] text-monety-textMain leading-tight mb-0.5">-₹${formatCurrency(e.amount)}</p>
+                  <p class="text-[10px] font-bold text-monety-textSub tracking-wide">${e.paymentType}</p>
+               </div>
+            </div>
+         </div>
+       `;
+    });
+  }
+  document.getElementById('granularTimelineList').innerHTML = timelineHtml;
+  
+  // Draw Trend Chart (Data needs to be chronological/ascending)
+  const chartExpenses = [...filteredExpenses].reverse(); 
+  const dateMap = {};
+  chartExpenses.forEach(e => {
+    const dStr = (e.paymentDate && e.paymentDate !== '-') ? formatModernDate(e.paymentDate).substring(0,6) : 'Unknown'; // e.g. "Mar 07"
+    dateMap[dStr] = (dateMap[dStr] || 0) + e.amount;
   });
+  
+  drawGranularTrendChart(dateMap, themeColorHex);
+
+  toggleModal('granularDetailsOverlay', 'granularDetailsSheet');
 };
+
+function drawGranularTrendChart(dataMap, themeHex) {
+  const ctx = document.getElementById('granularTrendChart').getContext('2d');
+  if(granularChartInstance) granularChartInstance.destroy();
+
+  const labels = Object.keys(dataMap);
+  let data = Object.values(dataMap);
+
+  // If only one data point, duplicate it visually to create a line
+  if (labels.length === 1 && labels[0] !== 'Unknown') {
+    labels.unshift('Start');
+    data.unshift(0); 
+  }
+
+  // Create smooth gradient
+  let gradient = ctx.createLinearGradient(0, 0, 0, 150);
+  gradient.addColorStop(0, hexToRgba(themeHex, 0.5));
+  gradient.addColorStop(1, hexToRgba(themeHex, 0));
+
+  granularChartInstance = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        data: data,
+        borderColor: themeHex,
+        backgroundColor: gradient,
+        fill: true,
+        tension: 0.4, // Beautiful curved spline
+        borderWidth: 3,
+        pointRadius: 4,
+        pointBackgroundColor: '#ffffff',
+        pointBorderColor: themeHex,
+        pointBorderWidth: 2,
+        pointHoverRadius: 6
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#1e1b4b',
+          padding: 10,
+          cornerRadius: 10,
+          displayColors: false,
+          callbacks: { label: (c) => `₹${formatCurrency(c.raw)}` }
+        }
+      },
+      scales: {
+        y: { display: false, grid: { display: false }, min: 0 },
+        x: { grid: { display: false }, border: { display: false }, ticks: { font: { family: "'Plus Jakarta Sans', sans-serif", size: 10, weight: '700' }, color: '#9ca3af' } }
+      }
+    }
+  });
+}
+
 
 // ==========================================
 // RENDER VIEWS 
@@ -986,9 +1188,6 @@ function getIconForCategory(cat) {
 }
 
 function renderDashboard() {
-  const sortKey = document.getElementById('sortDashboard').value;
-  const sortedExpenses = sortDataArray(state.expenses, sortKey).slice(0, 5); 
-  
   let totalEffectiveBudget = state.masters.reduce((sum, m) => {
     return sum + (m.finalizedAmount > 0 ? m.finalizedAmount : m.budget);
   }, 0);
@@ -996,64 +1195,132 @@ function renderDashboard() {
   let totalSpent = state.expenses.reduce((sum, e) => sum + e.amount, 0);
   const rem = totalEffectiveBudget - totalSpent;
   
-  document.getElementById("summBudgetStat").innerText = formatCurrency(totalEffectiveBudget);
+  // Update inner central text for the new Doughnut design
+  document.getElementById("donutBudget").innerText = formatCurrency(totalEffectiveBudget);
+  document.getElementById("donutSpent").innerText = formatCurrency(totalSpent);
+  
+  // Update the explicit planned card
+  document.getElementById("summPlannedExplicit").innerText = formatCurrency(totalEffectiveBudget);
+  
+  // Split Metrics below doughnut
   document.getElementById("summPaid").innerText = formatCurrency(totalSpent);
+  document.getElementById("summFuture").innerText = formatCurrency(rem > 0 ? rem : 0);
 
-  let html = "";
-  sortedExpenses.forEach(e => {
-    const ic = getIconForCategory(e.category);
-    html += `
-      <div class="bg-white rounded-[1.5rem] p-4 flex items-center justify-between cursor-pointer shadow-sm border border-monety-border" onclick="openExpenseModal('${e.id}')">
+  // Chart Data Preparation (Group by Category)
+  const catDataMap = {};
+  state.expenses.forEach(e => {
+    catDataMap[e.category] = (catDataMap[e.category] || 0) + e.amount;
+  });
+  
+  drawHomeDonut(catDataMap, totalSpent, totalEffectiveBudget);
+
+  // Source Consolidation
+  const sourceMap = {};
+  state.expenses.forEach(e => {
+    const sourceName = (e.source && e.source !== '-' && e.source.trim() !== '') ? e.source.trim() : 'Unspecified';
+    sourceMap[sourceName] = (sourceMap[sourceName] || 0) + e.amount;
+  });
+
+  const sortedSources = Object.keys(sourceMap).sort((a, b) => sourceMap[b] - sourceMap[a]);
+
+  let sourceHtml = "";
+  sortedSources.forEach(source => {
+    const amt = sourceMap[source];
+    const style = getDynamicColorStyle(source); 
+    
+    sourceHtml += `
+      <div class="bg-white rounded-full p-2 pr-4 flex items-center justify-between transition-all duration-300 cursor-pointer group transform hover:-translate-y-1 mb-4" style="box-shadow: 0 12px 24px -6px ${hexToRgba(style.hex, 0.25)};" onclick="openGranularDetails('source', '${source}')">
         <div class="flex items-center gap-4">
-          <div class="w-12 h-12 rounded-[1.25rem] ${ic.bg} flex items-center justify-center shrink-0">
-            <span class="text-xl ${ic.text} opacity-90">${ic.icon}</span>
+          <div class="w-12 h-12 rounded-full ${style.bg} ${style.text} flex items-center justify-center shrink-0">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
           </div>
           <div>
-            <h4 class="text-monety-textMain font-extrabold text-[15px] mb-0.5 leading-tight">${e.subcategory}</h4>
-            <p class="text-monety-textSub text-[11px] font-bold tracking-wide">${e.paymentType || e.category}</p>
+            <h4 class="text-monety-textMain font-extrabold text-[15px] mb-0.5 leading-tight">${source}</h4>
+            <p class="text-monety-textSub text-[10px] font-bold tracking-wider uppercase">Account</p>
           </div>
         </div>
-        <div class="text-right shrink-0">
-          <p class="text-monety-textMain font-extrabold text-[15px] mb-0.5 leading-tight">-₹${formatCurrency(e.amount)}</p>
-          <p class="text-monety-textSub text-[11px] font-bold tracking-wide">${formatModernDate(e.paymentDate)}</p>
+        <div class="text-right shrink-0 flex items-center gap-3">
+          <p class="text-monety-textMain font-extrabold text-[15px] leading-tight">₹${formatCurrency(amt)}</p>
+          <div class="w-7 h-7 rounded-full flex items-center justify-center transition-transform group-hover:scale-110" style="background-color: ${style.bg}; color: ${style.hex};">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
+          </div>
         </div>
       </div>
     `;
   });
 
-  document.getElementById("dashboardExpensesList").innerHTML = html || `<div class="text-center py-6 text-monety-textSub text-sm font-bold">No recent expenses</div>`;
+  document.getElementById("sourceConsolidationList").innerHTML = sourceHtml || `<div class="text-center py-6 text-monety-textSub text-sm font-bold">No sources tracked yet</div>`;
   
-  drawHomeDonut(totalSpent, rem < 0 ? 0 : rem);
-  
-  const chartDataMap = {};
-  state.expenses.forEach(e => {
-    chartDataMap[e.category] = (chartDataMap[e.category] || 0) + e.amount;
-  });
-  drawStatsChart(chartDataMap);
+  drawStatsChart(catDataMap, totalSpent);
 }
 
 function renderExpenses() {
   const sortKey = document.getElementById('sortExpenses').value;
-  const sorted = sortDataArray(state.expenses, sortKey);
+  
+  // Intelligent Consolidation Map: category|subcategory -> data
+  const statsMap = {};
+  
+  // Aggregate Expenses
+  state.expenses.forEach(e => {
+    const key = `${e.category}|${e.subcategory}`;
+    if (!statsMap[key]) statsMap[key] = { category: e.category, subcategory: e.subcategory, spent: 0, planned: 0, count: 0 };
+    statsMap[key].spent += e.amount;
+    statsMap[key].count += 1;
+  });
+  
+  // Aggregate Planned Budgets (Finalized OR Estimated)
+  state.masters.forEach(m => {
+    const key = `${m.category}|${m.subcategory}`;
+    if (!statsMap[key]) statsMap[key] = { category: m.category, subcategory: m.subcategory, spent: 0, planned: 0, count: 0 };
+    statsMap[key].planned += (m.finalizedAmount > 0 ? m.finalizedAmount : m.budget);
+  });
+
+  const consolidatedArray = Object.values(statsMap);
+
+  // Custom Sorting for consolidated data
+  consolidatedArray.sort((a,b) => {
+    if (sortKey === 'category') return a.category.localeCompare(b.category) || a.subcategory.localeCompare(b.subcategory);
+    if (sortKey === 'name') return a.subcategory.localeCompare(b.subcategory);
+    return b.spent - a.spent; // Default to Highest Spend
+  });
   
   let html = "";
-  sorted.forEach(e => {
-    const ic = getIconForCategory(e.category);
+  consolidatedArray.forEach(item => {
+    const ic = getIconForCategory(item.category);
+    const isOverBudget = (item.planned > 0) && (item.spent > item.planned);
+    
+    // Progress Bar Generation
+    let progressBarHtml = "";
+    if (item.planned > 0) {
+       const pct = Math.min((item.spent / item.planned) * 100, 100);
+       const barColor = isOverBudget ? 'bg-red-500' : 'bg-monety-blueDark';
+       progressBarHtml = `
+         <div class="w-full bg-[#f3f4f6] rounded-full h-1.5 mt-4 overflow-hidden">
+            <div class="h-1.5 rounded-full ${barColor} transition-all duration-500" style="width: ${pct}%"></div>
+         </div>
+       `;
+    }
+
     html += `
-      <div class="bg-white rounded-[1.5rem] p-4 flex items-center justify-between cursor-pointer shadow-sm border border-monety-border" onclick="openExpenseModal('${e.id}')">
-        <div class="flex items-center gap-4 flex-1">
-          <div class="w-12 h-12 rounded-[1.25rem] ${ic.bg} flex items-center justify-center shrink-0">
-            <span class="text-xl ${ic.text} opacity-90">${ic.icon}</span>
+      <div class="bg-white rounded-[1.5rem] p-5 shadow-sm border border-monety-border hover:shadow-md transition-all duration-300 cursor-pointer group transform hover:-translate-y-1 mb-4" onclick="openGranularDetails('category', '${item.category}', '${item.subcategory}')">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-4 flex-1">
+            <div class="w-12 h-12 rounded-[1.25rem] ${ic.bg} flex items-center justify-center shrink-0">
+              <span class="text-xl ${ic.text} opacity-90">${ic.icon}</span>
+            </div>
+            <div>
+              <h4 class="text-monety-textMain font-extrabold text-[15px] mb-0.5 leading-tight">${item.subcategory}</h4>
+              <p class="text-monety-textSub text-[11px] font-bold tracking-wide">${item.category} • ${item.count} txns</p>
+            </div>
           </div>
-          <div>
-            <h4 class="text-monety-textMain font-extrabold text-[15px] mb-0.5 leading-tight">${e.subcategory}</h4>
-            <p class="text-monety-textSub text-[11px] font-bold tracking-wide">${e.paymentType || e.category}</p>
+          <div class="text-right shrink-0 pl-2">
+            <p class="text-monety-textMain font-extrabold text-[15px] leading-tight mb-0.5">₹${formatCurrency(item.spent)}</p>
+            <p class="text-[10px] font-bold ${isOverBudget ? 'text-red-500' : 'text-monety-textSub'} tracking-wide">
+              ${item.planned > 0 ? `of ₹${formatCurrency(item.planned)}` : 'No plan (₹0)'}
+            </p>
           </div>
         </div>
-        <div class="text-right shrink-0">
-          <p class="text-monety-textMain font-extrabold text-[15px] mb-0.5 leading-tight">-₹${formatCurrency(e.amount)}</p>
-          <p class="text-monety-textSub text-[11px] font-bold tracking-wide">${formatModernDate(e.paymentDate)}</p>
-        </div>
+        ${progressBarHtml}
       </div>
     `;
   });
@@ -1063,15 +1330,27 @@ function renderExpenses() {
 
 function renderPlanning() {
   const sortKey = document.getElementById('sortPlanning').value;
-  const sorted = sortDataArray(state.masters, sortKey);
+  const sorted = [...state.masters].sort((a, b) => {
+    if (sortKey === 'category') return a.category.localeCompare(b.category) || a.subcategory.localeCompare(b.subcategory);
+    if (sortKey === 'amount') {
+        const amtA = a.finalizedAmount > 0 ? a.finalizedAmount : a.budget;
+        const amtB = b.finalizedAmount > 0 ? b.finalizedAmount : b.budget;
+        return amtB - amtA;
+    }
+    if (sortKey === 'status') {
+       const order = { 'Planning': 1, 'Contacted': 2, 'Finalized': 3 };
+       return (order[a.status] || 0) - (order[b.status] || 0) || a.subcategory.localeCompare(b.subcategory);
+    }
+    return 0;
+  });
   
   let html = "";
   sorted.forEach(m => {
     const ic = getIconForCategory(m.category);
     let statusColor = "bg-monety-textSub";
-    if(m.status === 'Finalized') statusColor = "bg-[#2dd4bf]"; /* Candy Teal */
-    if(m.status === 'Contacted') statusColor = "bg-[#fb923c]"; /* Peach */
-    if(m.status === 'Planning') statusColor = "bg-[#a78bfa]"; /* Lavender */
+    if(m.status === 'Finalized') statusColor = "bg-[#2dd4bf]"; 
+    if(m.status === 'Contacted') statusColor = "bg-[#fb923c]"; 
+    if(m.status === 'Planning') statusColor = "bg-[#a78bfa]"; 
 
     const effBudget = m.finalizedAmount > 0 ? m.finalizedAmount : m.budget;
     const hasFinalized = m.finalizedAmount > 0;
@@ -1115,7 +1394,11 @@ function renderVendors() {
   });
 
   const sortKey = document.getElementById('sortVendors').value || 'name';
-  const sorted = sortDataArray(filtered, sortKey);
+  const sorted = [...filtered].sort((a, b) => {
+    if (sortKey === 'category') return a.category.localeCompare(b.category) || a.subcategory.localeCompare(b.subcategory);
+    if (sortKey === 'name') return (a.name || a.subcategory || '').localeCompare(b.name || b.subcategory || '');
+    return 0;
+  });
   
   let html = "";
   sorted.forEach(m => {
@@ -1147,67 +1430,112 @@ function renderVendors() {
   document.getElementById("vendorsGrid").innerHTML = html || `<div class="text-center py-10 text-monety-textSub text-sm font-bold">No vendors found.</div>`;
 }
 
-function drawHomeDonut(spent, remaining) {
+function drawHomeDonut(dataMap, totalSpent, totalBudget) {
   const ctx = document.getElementById('homeDonutChart').getContext('2d');
   if(homeDonut) homeDonut.destroy();
+
+  const labels = Object.keys(dataMap);
+  const data = labels.map(k => dataMap[k]);
+  
+  // Custom vibrant donut palette to match the styling
+  const donutColors = ['#fb7185', '#a78bfa', '#2dd4bf', '#fb923c', '#38bdf8', '#f43f5e', '#eab308'];
+
+  // Handle empty state gracefully
+  const isDataEmpty = data.length === 0 || totalSpent === 0;
 
   homeDonut = new Chart(ctx, {
     type: 'doughnut',
     data: {
-      labels: ['Spent', 'Remaining'],
+      labels: isDataEmpty ? ['No Expenses'] : labels,
       datasets: [{
-        data: [spent, remaining || 1], 
-        backgroundColor: ['#fb7185', '#c4b5fd'], /* Pink & Lavender */
+        data: isDataEmpty ? [1] : data, 
+        backgroundColor: isDataEmpty ? ['#f3f4f6'] : donutColors, 
         borderWidth: 0,
-        cutout: '72%'
+        borderRadius: 20, // This applies the beautiful rounded ends to each segment
+        spacing: isDataEmpty ? 0 : 4, // Spacing between the segments
+        cutout: '80%' // Makes the donut thin
       }]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      plugins: { legend: { display: false }, tooltip: { enabled: false } },
+      plugins: { legend: { display: false }, tooltip: { enabled: !isDataEmpty } },
       animation: { duration: 800 }
     }
   });
+
+  // Render the Dynamic Legend for the Donut
+  let legendHtml = "";
+  if (!isDataEmpty) {
+    labels.forEach((cat, index) => {
+        const color = donutColors[index % donutColors.length];
+        legendHtml += `
+          <div class="flex items-center gap-2">
+             <div class="w-3 h-3 rounded-full" style="background-color: ${color}"></div>
+             <span class="text-[11px] font-bold text-monety-textSub tracking-wider">${cat}</span>
+          </div>
+        `;
+    });
+  } else {
+      legendHtml = `<span class="text-[11px] font-bold text-monety-textSub tracking-wider">Add expenses to see breakdown</span>`;
+  }
+  document.getElementById("donutLegend").innerHTML = legendHtml;
 }
 
-function drawStatsChart(dataMap) {
+function drawStatsChart(dataMap, totalSpent) {
   const ctx = document.getElementById('expenseChart').getContext('2d');
-  const labels = Object.keys(dataMap).filter(k => dataMap[k] > 0);
-  const data = labels.map(k => dataMap[k]);
+  
+  // Update inner central text
+  document.getElementById('statsTotalSpent').innerText = formatCurrency(totalSpent || 0);
 
   if(statsChart) statsChart.destroy();
 
+  const labels = Object.keys(dataMap).filter(k => dataMap[k] > 0);
+  const data = labels.map(k => dataMap[k]);
+  
+  // Custom vibrant donut palette to match the styling
+  const donutColors = ['#fb7185', '#a78bfa', '#2dd4bf', '#fb923c', '#38bdf8', '#f43f5e', '#eab308'];
+
+  // Handle empty state gracefully
+  const isDataEmpty = data.length === 0 || totalSpent === 0;
+
   statsChart = new Chart(ctx, {
-    type: 'bar',
+    type: 'doughnut',
     data: {
-      labels: labels.map(l => l.substring(0,6) + '..'),
+      labels: isDataEmpty ? ['No Expenses'] : labels,
       datasets: [{
-        data: data,
-        backgroundColor: ['#fb7185', '#a78bfa', '#f472b6', '#fca5a5', '#818cf8'],
-        borderRadius: 6,
-        barThickness: 20,
+        data: isDataEmpty ? [1] : data, 
+        backgroundColor: isDataEmpty ? ['#f3f4f6'] : donutColors, 
+        borderWidth: 0,
+        borderRadius: 20, 
+        spacing: isDataEmpty ? 0 : 4, 
+        cutout: '80%' 
       }]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          backgroundColor: '#312e81',
-          padding: 12,
-          cornerRadius: 12,
-          displayColors: false,
-          callbacks: { label: (c) => `₹${formatCurrency(c.raw)}` }
-        }
-      },
-      scales: {
-        y: { display: false, grid: { display: false } },
-        x: { grid: { display: false }, border: { display: false }, ticks: { font: { family: "'Plus Jakarta Sans', sans-serif", size: 10, weight: '700' }, color: '#a8a29e' } }
-      }
+      plugins: { legend: { display: false }, tooltip: { enabled: !isDataEmpty } },
+      animation: { duration: 800 }
     }
   });
+
+  // Render the Dynamic Legend for the Donut
+  let legendHtml = "";
+  if (!isDataEmpty) {
+    labels.forEach((cat, index) => {
+        const color = donutColors[index % donutColors.length];
+        legendHtml += `
+          <div class="flex items-center gap-2">
+             <div class="w-3 h-3 rounded-full" style="background-color: ${color}"></div>
+             <span class="text-[11px] font-bold text-monety-textSub tracking-wider">${cat}</span>
+          </div>
+        `;
+    });
+  } else {
+      legendHtml = `<span class="text-[11px] font-bold text-monety-textSub tracking-wider">No expenses yet</span>`;
+  }
+  document.getElementById("statsDonutLegend").innerHTML = legendHtml;
 }
 
 // ==========================================
