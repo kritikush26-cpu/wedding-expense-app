@@ -1,173 +1,96 @@
-# 💍 Our Wedding - Budget Tracker
+# 💍 Our Wedding — Budget Tracker
 
-A beautiful, modern wedding budget tracker designed to help couples easily monitor and manage their wedding expenses. Built with a clean, intuitive interface featuring real-time calculations, visual analytics, and comprehensive expense tracking.
+> A self-contained single-page wedding budget app with Firebase sync, interactive charts, and a mobile-first dark UI.
 
-## Features
-
-### 📊 **Dashboard**
-- Visual doughnut chart showing spent vs budget allocation
-- Key metrics at a glance:
-  - **You've Spent**: Track actual expenses against total budget
-  - **Total Planned Expense**: Sum of all budgeted amounts
-  - **Payments Made**: Total amount already paid out
-  - **Future Payments**: Upcoming expenses to be paid
-- **Spent by Source**: Breakdown of expenses by payment source/vendor
-
-### 📈 **Statistics & Analytics**
-- Comprehensive expense analytics with doughnut chart visualization
-- View total spent across all categories
-- Dynamic category legend with color coding
-- Expense history with full details (All Expenses list)
-- Smart sorting options for expense data
-
-### 💰 **Expense Management**
-- Log individual expenses with full details
-- Categorize expenses by type and vendor
-- Track payment methods and transaction dates
-- Multiple sorting options:
-  - By amount (High to Low, Low to High)
-  - By date (Newest to Oldest, Oldest to Newest)
-  - By category
-  - By vendor/source
-
-### 🏖️ **Budget Planning**
-- Create and manage budget plans by category and vendor
-- Track planned amounts vs actual spending
-- Monitor vendor status throughout planning process
-- Real-time budget calculations and updates
-
-### 🔐 **Secure Access**
-- Email and password authentication
-- Personalized dashboard for each user ("Hello, Lovebirds")
-- Logout functionality
-- Secure session management
-
-## Tech Stack
-
-- **Frontend**: 
-  - HTML5
-  - Tailwind CSS (responsive design framework)
-  - Chart.js (data visualization)
-  - Plus Jakarta Sans font (modern typography)
-  
-- **Backend**: Firebase Firestore (cloud database)
-- **Authentication**: Firebase Auth
-- **Design**: Modern, mobile-optimized UI with smooth animations
-
-## Getting Started
-
-### Quick Start
-Simply open `index.html` in your web browser to get started. The application features a responsive design that works seamlessly on desktop, tablet, and mobile devices.
-
-### Navigation
-The app uses a bottom navigation bar with multiple tabs:
-1. **Dashboard** - Home view with overview and key metrics
-2. **Statistics** - Detailed expense analytics and breakdowns
-3. Additional tabs for budget planning and expense management
-
-## User Interface Highlights
-
-- **Clean, Minimalist Design**: Built with Tailwind CSS and a custom color palette (soft lavender blue, candy rose pink)
-- **Smooth Animations**: Fade and scale transitions for tab switching
-- **Responsive Layout**: Mobile-first design with max-width container (420px on desktop)
-- **Interactive Charts**: Visual representations of budget data using Chart.js
-- **Bottom Sheet Modals**: Modern modal interface for data entry
-- **Custom Radio Inputs**: Styled form elements with color customization
-
-## Features Breakdown
-
-### Calculations & Summaries
-- Real-time sum calculations for total budget and expenses
-- Automatic tracking of paid vs future payments
-- Per-source expense consolidation
-- Dynamic legend generation for chart categories
-
-### Data Organization
-- Budget tracking by category and vendor
-- Expense logging with transaction details
-- Source-based expense breakdown
-- Status tracking for planning purposes
-
-### Visual Feedback
-- Animated loading indicators (pulse effect)
-- Toast notifications for user actions
-- Modal confirmations for critical actions
-- Status indicator for real-time data sync
-  "Fixed Budget": 150000,
-  "Contact": "john@grandpalace.com",
-  "Number": "+91-9876543210",
-  "Finalized At": "2026-02-15"
-}
-```
-
-### Expenses Collection (Actual Spending)
-```json
-{
-  "category": "Venue",
-  "subcategory": "Banquet Hall",
-  "description": "Hall Deposit",
-  "amount": 50000,
-  "paymentType": "Online",
-  "paymentDate": "2026-02-15",
-  "source": "Bank Transfer"
-}
-```
-
-## Deployment
-
-### GitHub Pages
-1. Push code to GitHub
-2. Go to Settings → Pages
-3. Select main branch as source
-4. Visit `https://username.github.io/wedding-expense-app/`
-
-### Firebase Hosting
-1. Install Firebase CLI: `npm install -g firebase-tools`
-2. Initialize: `firebase init hosting`
-3. Deploy: `firebase deploy`
-
-## Browser Support
-
-- Chrome/Edge 90+
-- Firefox 88+
-- Safari 14+
-- Mobile browsers (responsive design)
-
-## Firebase Setup
-
-This app requires Firebase credentials. Add your config:
-
-```javascript
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
-};
-```
-
-## Tips for Best Experience
-
-✓ Use on desktop for full feature access
-✓ Keep browser updated for best performance
-✓ Enable browser notifications for sync updates
-✓ Use Chrome for optimal Tailwind CSS rendering
-
-## Contributing
-
-This is a personal project for wedding planning. Customization for other events is welcome!
-
-## License
-
-Personal Use License - Feel free to fork and customize for your event!
-
-## Author
-
-Created with 💜 for wedding planning
+![Stack](https://img.shields.io/badge/Firebase-Firestore%20%2B%20Auth-orange) ![UI](https://img.shields.io/badge/UI-Tailwind%20CSS-blue) ![Charts](https://img.shields.io/badge/Charts-Chart.js-purple) ![Deploy](https://img.shields.io/badge/Deploy-Single%20HTML%20file-green)
 
 ---
 
-**Last Updated**: April 2026
+## Overview
 
+A complete wedding finance tracker built in one `index.html` file. Vendors, budgets, and expenses are stored in Firebase Firestore with real-time sync across devices. All UI lives in a 420px mobile-first container that adapts gracefully to desktop.
+
+---
+
+## Four Main Views
+
+| View | Description |
+|------|-------------|
+| 🏠 **Dashboard** | Doughnut chart of spend vs budget. Paid, owed, and per-source breakdowns. |
+| 📊 **Statistics** | All logged expenses with sorting and a category-level spending chart. |
+| ✅ **Planning** | Budget plan cards by category. Search, filter, and track vendor status. |
+| 👥 **Vendors** | Vendor directory with contact info, budget, and Planning/Contacted/Finalized status. |
+
+Navigation between views is handled by a fixed bottom bar. The central **+** button opens a quick-action sheet.
+
+---
+
+## Modals (Slide-up Sheets)
+
+| Modal | Purpose |
+|-------|---------|
+| **Log Expense** | Category, amount, payment type (UPI / Cash / Card / Bank), date, notes, and source account. |
+| **Budget / Vendor Plan** | Estimated vs locked budget, vendor name, contact person, phone, and status. |
+| **Source Detail** | Spending trend chart + full transaction history for a payment source. |
+| **Category Detail** | All vendors in a category with budgets and status indicators. |
+| **Add Action Sheet** | Entry point from the central + button — choose "Log Expense" or "Add Budget/Vendor". |
+| **Confirm Delete** | Deletion confirmation with Cancel/Delete to prevent accidental data loss. |
+
+All modals follow a consistent pattern: dark overlay, slide-up sheet, sticky header with a close button, and independently scrollable content.
+
+---
+
+## Tech Stack
+
+| Library | Role |
+|---------|------|
+| **Firebase Auth** | Email/password login |
+| **Firebase Firestore** | Cloud data storage and real-time sync |
+| **Chart.js** | Doughnut and line charts |
+| **Tailwind CSS** | Utility styling with a custom neon color palette |
+| **Plus Jakarta Sans** | Primary typeface (Google Fonts) |
+
+---
+
+## Key Design Decisions
+
+- **Single file** — CSS, JS, and HTML in one `index.html`. No build step or separate server required.
+- **Mobile-first** — 420px max-width container, fixed bottom navigation, slide-up modals.
+- **Dark theme** — Custom neon accent palette: yellow (primary actions), pink, cyan, purple, orange, and green for status indicators.
+- **Data adapter** — Normalizes inconsistent Firestore field names and fills missing defaults on every load.
+- **Central state object** — All budget plans, expenses, and categories are tracked in a single JS state that updates charts and UI in real time when data changes.
+
+---
+
+## Color Palette
+
+| Color | Usage |
+|-------|-------|
+| Neon Yellow | Primary actions, active nav tab |
+| Pink | Secondary actions, central + button gradient |
+| Cyan | Future / upcoming items |
+| Purple | Planning stage status |
+| Orange | Contacted status |
+| Green | Finalized status |
+
+---
+
+## Authentication
+
+Login is handled by Firebase Authentication using email and password. The login screen sits above all content at a high z-index and is dismissed on successful auth. A logout button is available in the top-right header.
+
+---
+
+## File Structure
+
+```
+index.html
+├── <head>        — Tailwind config, Chart.js, Google Fonts
+├── <style>       — Custom CSS (animations, modals, scrollbar, radio styles)
+├── Login screen  — Full-screen overlay
+├── Header        — Sticky, blur backdrop, greeting + logout
+├── Tab views     — Dashboard · Statistics · Planning · Vendors
+├── Bottom nav    — 4 tabs + central action button
+├── Modals (×6)   — Expense · Plan · Source detail · Category · Action sheet · Confirm delete
+└── <script>      — Firebase init, state management, chart rendering, CRUD operations
+```
